@@ -72,16 +72,20 @@ Nannan Wang; Muxin Hua; Jose Cesario.
         coach career history.
 
 -    How many players will be free agency by 2022?
+   
     -   Check the relationship between free agency players and their age
     -   What teams will have more free agency players upcoming?
   
 -    What are the 20 MVP players based on their earns?
+   
     -   Based on avg year, total guaranteed and fully guaranteed amounts
 
 -    What teams have the highest fully guaranteed expenses?
+   
     -   Join coach data to see which team have the most guaranteed expenses per year
 
 -    What is the relationship between coach salaries and their records?
+   
     -   Considering their number of wins, losses, ties, championships
 
 ## Group Members
