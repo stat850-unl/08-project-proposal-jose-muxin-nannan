@@ -1,6 +1,6 @@
 Stat 850 Project Description
 ================
-Firstname Lastname, Firstname Lastname, …
+Nannan Wang; MuXin Hua; Jose Cesario.
 
 ## Instructions
 
