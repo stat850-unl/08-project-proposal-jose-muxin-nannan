@@ -76,11 +76,19 @@ We have three datasets for this project, **player_salary**, **coach_salary**, an
   + position
   + age
   + team
-
+  </br>
+* Is there salary difference in terms of:
+  + age
+  + position
+  </br>
+* correlation exploration:
+  + is age correlated with player's total value?
+  + is total value positively associated with fully-guaranteed? 
+  </br>
 * What are the teams tend to pay more.  
   + Join with coach data to see if these teams tend to pay more to their coaches too.  
   + Join with coach record data to see if high salary related to coach career history.  
-
+  </br>
 
 ## Group Members
 Nannan Wang  
