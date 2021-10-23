@@ -54,10 +54,10 @@ Nannan Wang; Muxin Hua; Jose Cesario.
         *SB*: super Bowl Championships  
         </br>
 
--   Not all our datasets are from the same year, but if we look at the
-    valid time of contracts, we find most of them are 5 years, so we
-    assume the situations didn’t change much in the field, and can be
-    used for analyzing.
+-   Not all our datasets are from the same year. If we look at the time
+    range of contracts, most of them are valid for 5 years, so we assume
+    the situations don’t change much in few years in the field, which
+    justifies the conclusions from these datasets.
 
 ## Potential Topics to Explore Using the Data Set
 
@@ -67,20 +67,18 @@ Nannan Wang; Muxin Hua; Jose Cesario.
     -   team
 -   What are the teams tend to pay more.
     -   Join with coach data to see if these teams tend to pay more to
-        their coaches too.
+        their coaches too.  
     -   Join with coach record data to see if high salary related to
         coach career history.
-
--    How many players will be free agency by 2022?
+-   How many players will be free agency by 2022?
     -   Check the relationship between free agency players and their age
     -   What teams will have more free agency players upcoming?
-  
--    What are the 20 MVP players based on their earns?
+-   What are the 20 MVP players based on their earns?
     -   Based on avg year, total guaranteed and fully guaranteed amounts
-    -   What teams have the highest fully guaranteed expenses?
-    -   Join coach data to see which team have the most guaranteed expenses per year
-
--    What is the relationship between coach salaries and their records?
+-   What teams have the highest fully guaranteed expenses?
+    -   Join coach data to see which team have the most guaranteed
+        expenses per year
+-   What is the relationship between coach salaries and their records?
     -   Considering their number of wins, losses, ties, championships
 
 ## Group Members
