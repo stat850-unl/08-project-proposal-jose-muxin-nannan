@@ -66,6 +66,12 @@ Nannan Wang; Muxin Hua; Jose Cesario.
     -   position
     -   age
     -   team
+-   Is there salary difference in terms of:
+    -   age
+    -   position
+-   correlation exploration:
+    -   is age correlated with player’s total value?
+    -   is total value positively associated with fully-guaranteed?
 -   What are the teams tend to pay more.
     -   Join with coach data to see if these teams tend to pay more to
         their coaches too.  
