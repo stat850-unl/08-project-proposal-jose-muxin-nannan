@@ -23,7 +23,7 @@ Nannan Wang; Muxin Hua; Jose Cesario.
         *player* : name  
         *team* : team the player in  
         *age* : age  
-        *total\_value* : ？？  
+        *total\_value* : Total sum of property  
         *ave\_year* : yearly averaged salary  
         *total\_guaranteed* : a new contract for the player is initially
         reported with  
@@ -35,7 +35,8 @@ Nannan Wang; Muxin Hua; Jose Cesario.
         *name*: name of the coach  
         *team*: team the coach works for  
         *division*: division of the team  
-        *annual salary*: annual salary *net worth*: ???  
+        *annual salary*: annual salary  
+        *net worth*: Total sum of property  
         *position*: position of the coach  
         </br>
     -   **coach record** *name*: name of the coach  
