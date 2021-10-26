@@ -2,7 +2,7 @@
 data <- football_salaries
 head(data)
 str(data)
-# import packages
+
 library(ggplot2)
 a <- ggplot(data=data,aes(x=position,y=total_value))
 a+geom_boxplot()
