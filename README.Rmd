@@ -105,7 +105,7 @@ We have three datasets for this project, **player_salary**, **coach_salary**, an
 
 * What is the relationship between coach salaries and their records?
   + Considering their number of wins, losses, ties, championships
->>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
+
 
 ## Group Members
 Nannan Wang  
