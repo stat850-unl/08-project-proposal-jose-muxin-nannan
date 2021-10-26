@@ -38,11 +38,8 @@ We have three datasets for this project, **player_salary**, **coach_salary**, an
       *player*           : name   
       *team*             : team the player in   
       *age*              : age     
-<<<<<<< HEAD
       *total_value*      : total amount of money on the contract
-=======
       *total_value*      : Total sum of property   
->>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
       *ave_year*         : yearly averaged salary  
       *total_guaranteed* : a new contract for the player is initially reported with    
       *fully_guaranteed* : money guaranteed to get regardless of what happens    
