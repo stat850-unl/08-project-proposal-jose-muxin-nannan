@@ -13,5 +13,5 @@ meanPosition <-data %>% group_by(position)%>%
   summarise(avg=mean(total_value))
 meanPosition <- as.data.frame(meanPosition)
 order <- order(meanPosition$avg,decreasing=T)
-# Quarterback has the highest value, the second is 4-3-defensive-end position
+# Quarterback has the highest value, the second is 4-3-defensive-end position, the third is the 4-3-defensive-end position
 meanPosition1 <- meanPosition[order,]
