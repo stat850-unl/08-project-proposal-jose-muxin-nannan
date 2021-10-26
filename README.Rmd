@@ -88,9 +88,7 @@ We have three datasets for this project, **player_salary**, **coach_salary**, an
 * What are the teams tend to pay more.  
   + Join with coach data to see if these teams tend to pay more to their coaches too.  
   + Join with coach record data to see if high salary related to coach career history.  
-<<<<<<< HEAD
   </br>
-=======
 
 * How many players will be free agency by 2022?
   + Check the relationship between free agency players and their age
