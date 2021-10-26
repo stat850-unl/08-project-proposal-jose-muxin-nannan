@@ -38,7 +38,11 @@ We have three datasets for this project, **player_salary**, **coach_salary**, an
       *player*           : name   
       *team*             : team the player in   
       *age*              : age     
+<<<<<<< HEAD
       *total_value*      : total amount of money on the contract
+=======
+      *total_value*      : Total sum of property   
+>>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
       *ave_year*         : yearly averaged salary  
       *total_guaranteed* : a new contract for the player is initially reported with    
       *fully_guaranteed* : money guaranteed to get regardless of what happens    
@@ -48,8 +52,8 @@ We have three datasets for this project, **player_salary**, **coach_salary**, an
       *name*: name of the coach  
       *team*: team the coach works for  
       *division*: division of the team  
-      *annual salary*: annual salary 
-      *net worth*: ???  
+      *annual salary*: annual salary   
+      *net worth*: Total sum of property   
       *position*: position of the coach  
       </br>
   + **coach record**      
@@ -88,7 +92,23 @@ We have three datasets for this project, **player_salary**, **coach_salary**, an
 * What are the teams tend to pay more.  
   + Join with coach data to see if these teams tend to pay more to their coaches too.  
   + Join with coach record data to see if high salary related to coach career history.  
+<<<<<<< HEAD
   </br>
+=======
+
+* How many players will be free agency by 2022?
+  + Check the relationship between free agency players and their age
+  + What teams will have more free agency players upcoming?
+  
+* What are the 20 MVP players based on their earns?
+  + Based on avg year, total guaranteed and fully guaranteed amounts
+
+* What teams have the highest fully guaranteed expenses?
+  + Join coach data to see which team have the most guaranteed expenses per year
+
+* What is the relationship between coach salaries and their records?
+  + Considering their number of wins, losses, ties, championships
+>>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
 
 ## Group Members
 Nannan Wang  

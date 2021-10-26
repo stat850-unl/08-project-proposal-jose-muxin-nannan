@@ -2,6 +2,14 @@
 title: "Football analysis"
 output: html_document
 ---
+```{r}
+# Libraries used
+library(dplyr)
+library(tidyverse)
+library(tidyr)
+```
+
+
 
 ## Prepare the data for analysis
 ### Read in data
@@ -23,6 +31,132 @@ coach_record <- data.list[[3]]
 ```
 
 ### Cleaning data
+#### General information of the datasets
+We first take a brief look at the datasets of their descriptive statistics.
+```{r}
+summary(player_salary)
+summary(coach_salary)
+summary(coach_record)
+```
+Check if there are Na values.
+```{r}
+# Check if there are NA values
+for (i in sheet.index){
+  print(data.list[[i]] %>% is.na() %>% sum())
+}
+```
+We see there are some cleaning should be done before we can use these datasets:  
+1. Take care of the missing value in **coach_salaries**  
+2. Change the column names in **coach_record**  
+3. For consistency, change salary-related variable types to double in **coach_salary** and **coach_record**.    
+4. Separate variables if needed.  
+
+##### 1. missing values
+```{r}
+# replicate the original model for cleaning
+player_salary_ <- player_salary
+coach_salary_ <- coach_salary
+coach_record_ <- coach_record
+
+# Finding the missing value, and filled in with internet searching result
+coach_salary_ <- coach_salary
+coach_salary_[c(which(is.na(coach_salary)==TRUE, arr.ind = TRUE)[,1]),5] <- '2.5 million'
+```
+
+##### 2 Fix column names
+```{r}
+colnames(coach_record_) <- c(coach_record_[1,])
+coach_record_ <- coach_record_[-1,]
+rownames(coach_record_) <- c(1:nrow(coach_record_))
+
+colnames(coach_salary_) <- c(colnames(coach_salary_)[1:3], 'Annual_salary', 'Net_worth', colnames(coach_salary_)[6])
+```
+
+##### 3 change the variable type   
+3.1. **coach_salary**
+* *Annual_salary*
+```{r}
+# get the index of the cells with out 'million'
+no_mill <- c(which(!agrepl('million', coach_salary_$Annual_salary, ignore.case = T)))
+
+# paste 'million' to uniform these cells
+for (i in no_mill)
+  coach_salary_[i,'Annual_salary'] <- paste(coach_salary_[i,'Annual_salary'], 'million', collapse = ' ')
+
+# separate the numeric parts and drop million
+coach_salary_ <- separate(coach_salary_, Annual_salary, c('income', NA), ' ')
+
+# Keep numeric parts and change variable type to numeric
+for (i in 1:nrow(coach_salary_))
+  coach_salary_[i,'income'] <-
+substr(coach_salary_[i, 'income'], 2, nchar(coach_salary_[i,'income']))
+
+# numerize the variable
+for (i in 1:nrow(coach_salary_)){
+  if (i %in% no_mill)
+    coach_salary_[i, 'income'] <- as.double(gsub(',', '', coach_salary_[i,'income']))
+  if (i==24)
+      coach_salary_[i, 'income'] <- as.double(substr(coach_salary_[i, 'income'], 1, (nchar(coach_salary_[i,'income'])-1)))
+  else
+    coach_salary_[i, 'income'] <- as.double(coach_salary_[i, 'income'])*1000000
+}
+coach_salary_ <- rename(coach_salary_, 'Annual_salary'='income')
+```
+
+* *Net_salary*
+```{r}
+# Remove dollar sign and trim
+for (i in 1:nrow(coach_salary_)){
+  coach_salary_[i, 'Net_worth'] <- gsub('\\$', '', coach_salary_[i, 'Net_worth'])
+  coach_salary_[i, 'Net_worth'] <- gsub(' ' , '', coach_salary_[i, 'Net_worth'])
+}
+
+coach_salary_ <- separate(coach_salary_, Net_worth, c('net', NA), 'million')
+
+coach_salary_$net <- as.double(coach_salary_$net)*1000000
+
+coach_salary_ <- rename(coach_salary_, 'Net_worth'='net')
+```
+
+3.2 **coach_record**
+```{r}
+for (i in 4:ncol(coach_record_))
+  coach_record_[,i] <- as.double(coach_record_[,i])
+```
+
+##### 4. Separate variables  
+* **player_salary**
+```{r}
+
+player_salary_ <- player_salary %>% separate(free_agency, c('agency_time', 'type'),' ')
+# There's warning of NA's in the dataset
+
+# Extract rows with NA values
+player_salary_[c(which(is.na(player_salary_)==TRUE, arr.ind = TRUE)[,1]),]
+
+# These are not top players
+# the number of missing data is not very large, so we just drop  them
+player_salary_ <- player_salary_[-c(which(is.na(player_salary_)==TRUE, arr.ind = TRUE)[,1]) ,]
+rownames(player_salary_) <- c(1:nrow(player_salary_))
+
+player_salary_$agency_time <- as.numeric(player_salary_$agency_time)
+```
+```{r}
+player_salary <- player_salary_
+coach_record <- coach_record_
+coach_salary <- coach_salary_
+```
+
+
+## Topics and Analysis
+
+
+
+
+
+
+
+
 
 Your final project consists of a written report and a presentation (uploaded to VidGrid), to be turned in instead of a final exam. In this project, you will select a topic, acquire data from one or more sources, and present any interesting findings you might come across as you explore your data.
 

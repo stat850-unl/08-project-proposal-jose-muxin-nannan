@@ -23,7 +23,11 @@ Nannan Wang; Muxin Hua; Jose Cesario.
         *player* : name  
         *team* : team the player in  
         *age* : age  
+<<<<<<< HEAD
         *total\_value* : total amount of money on the contract
+=======
+        *total\_value* : Total sum of property  
+>>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
         *ave\_year* : yearly averaged salary  
         *total\_guaranteed* : a new contract for the player is initially
         reported with  
@@ -35,11 +39,19 @@ Nannan Wang; Muxin Hua; Jose Cesario.
         *name*: name of the coach  
         *team*: team the coach works for  
         *division*: division of the team  
+<<<<<<< HEAD
         *annual salary*: annual salary *net worth*: ???  
         *position*: position of the coach  
         </br>
     -   **coach record**  
         *name*: name of the coach  
+=======
+        *annual salary*: annual salary  
+        *net worth*: Total sum of property  
+        *position*: position of the coach  
+        </br>
+    -   **coach record** *name*: name of the coach  
+>>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
         *Team*: team the coach works for  
         *seasons*: seasons the coach coaches  
         *Gms*: games Coached  
@@ -66,17 +78,33 @@ Nannan Wang; Muxin Hua; Jose Cesario.
     -   position
     -   age
     -   team
+<<<<<<< HEAD
 -   Is there salary difference in terms of:
     -   age
     -   position
 -   correlation exploration:
     -   is age correlated with player’s total value?
     -   is total value positively associated with fully-guaranteed?
+=======
+>>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
 -   What are the teams tend to pay more.
     -   Join with coach data to see if these teams tend to pay more to
         their coaches too.  
     -   Join with coach record data to see if high salary related to
         coach career history.
+<<<<<<< HEAD
+=======
+-   How many players will be free agency by 2022?
+    -   Check the relationship between free agency players and their age
+    -   What teams will have more free agency players upcoming?
+-   What are the 20 MVP players based on their earns?
+    -   Based on avg year, total guaranteed and fully guaranteed amounts
+-   What teams have the highest fully guaranteed expenses?
+    -   Join coach data to see which team have the most guaranteed
+        expenses per year
+-   What is the relationship between coach salaries and their records?
+    -   Considering their number of wins, losses, ties, championships
+>>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
 
 ## Group Members
 
