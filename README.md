@@ -23,14 +23,10 @@ Nannan Wang; Muxin Hua; Jose Cesario.
         *player* : name  
         *team* : team the player in  
         *age* : age  
-<<<<<<< HEAD
         *total\_value* : total amount of money on the contract
-=======
-        *total\_value* : Total sum of property  
->>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
         *ave\_year* : yearly averaged salary  
-        *total\_guaranteed* : a new contract for the player is initially
-        reported with  
+        *total\_guaranteed* : players could get this amount of money
+        after they serve several years(from the contract) for the team  
         *fully\_guaranteed* : money guaranteed to get regardless of what
         happens  
         *free\_agency* : time when the contract of the player expires  
@@ -39,19 +35,12 @@ Nannan Wang; Muxin Hua; Jose Cesario.
         *name*: name of the coach  
         *team*: team the coach works for  
         *division*: division of the team  
-<<<<<<< HEAD
-        *annual salary*: annual salary *net worth*: ???  
-        *position*: position of the coach  
-        </br>
-    -   **coach record**  
-        *name*: name of the coach  
-=======
         *annual salary*: annual salary  
         *net worth*: Total sum of property  
         *position*: position of the coach  
         </br>
-    -   **coach record** *name*: name of the coach  
->>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
+    -   **coach record**  
+        *name*: name of the coach  
         *Team*: team the coach works for  
         *seasons*: seasons the coach coaches  
         *Gms*: games Coached  
@@ -77,23 +66,20 @@ Nannan Wang; Muxin Hua; Jose Cesario.
 -   What are the variables related to high salary of players?
     -   position
     -   age
-    -   team
-<<<<<<< HEAD
+    -   team </br>
 -   Is there salary difference in terms of:
     -   age
-    -   position
+    -   position </br>
 -   correlation exploration:
     -   is age correlated with player’s total value?
     -   is total value positively associated with fully-guaranteed?
-=======
->>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
+        </br>
 -   What are the teams tend to pay more.
     -   Join with coach data to see if these teams tend to pay more to
         their coaches too.  
     -   Join with coach record data to see if high salary related to
-        coach career history.
-<<<<<<< HEAD
-=======
+        coach career history.  
+        &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD </br> =======
 -   How many players will be free agency by 2022?
     -   Check the relationship between free agency players and their age
     -   What teams will have more free agency players upcoming?
@@ -104,7 +90,6 @@ Nannan Wang; Muxin Hua; Jose Cesario.
         expenses per year
 -   What is the relationship between coach salaries and their records?
     -   Considering their number of wins, losses, ties, championships
->>>>>>> 89fe71719374850098804ed7f6bb6290ff944f8a
 
 ## Group Members
 
