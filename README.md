@@ -23,7 +23,7 @@ Nannan Wang; Muxin Hua; Jose Cesario.
         *player* : name  
         *team* : team the player in  
         *age* : age  
-        *total\_value* : total amount of money on the contract
+        *total\_value* : total amount of money on the contract  
         *ave\_year* : yearly averaged salary  
         *total\_guaranteed* : players could get this amount of money
         after they serve several years(from the contract) for the team  

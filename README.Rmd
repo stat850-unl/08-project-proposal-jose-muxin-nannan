@@ -38,7 +38,7 @@ We have three datasets for this project, **player_salary**, **coach_salary**, an
       *player*           : name   
       *team*             : team the player in   
       *age*              : age     
-      *total_value*      : total amount of money on the contract
+      *total_value*      : total amount of money on the contract  
       *ave_year*         : yearly averaged salary  
       *total_guaranteed* : players could get this amount of money after they serve several years(from the contract) for the team  
       *fully_guaranteed* : money guaranteed to get regardless of what happens    
