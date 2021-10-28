@@ -63,35 +63,47 @@ Nannan Wang; Muxin Hua; Jose Cesario.
 
 ## Potential Topics to Explore Using the Data Set
 
--   What are the variables related to high salary of players?
-    -   position
-    -   age
-    -   team </br>
--   Is there salary difference in terms of:
-    -   age
-    -   position </br>
--   correlation exploration:
-    -   is age correlated with player’s total value?
-    -   is total value positively associated with fully-guaranteed?
-        </br>
--   What are the teams tend to pay more.
-    -   Join with coach data to see if these teams tend to pay more to
-        their coaches too.  
-    -   Join with coach record data to see if high salary related to
-        coach career history. </br>
--   How many players will be free agency by 2022?
-    -   Check the relationship between free agency players and their
-        age  
-    -   What teams will have more free agency players upcoming? </br>
--   What are the 20 MVP players based on their earns?
-    -   Based on avg year, total guaranteed and fully guaranteed amounts
-        </br>
--   What teams have the highest fully guaranteed expenses?
-    -   Join coach data to see which team have the most guaranteed
-        expenses per year </br>
--   What is the relationship between coach salaries and their records?
-    -   Considering their number of wins, losses, ties, championships
-        </br>
+1.  What are the variables related to high salary of players?
+
+-   position
+-   age
+-   team </br>
+
+2.  Is there salary difference in terms of:
+
+-   age
+-   position </br>
+
+3.  correlation exploration:
+
+-   is age correlated with player’s total value?
+-   is total value positively associated with fully-guaranteed? </br>
+
+4.  What are the teams tend to pay more.  
+
+-   Join with coach data to see if these teams tend to pay more to their
+    coaches too.  
+-   Join with coach record data to see if high salary related to coach
+    career history. </br>
+
+5.  How many players will be free agency by 2022?  
+
+-   Check the relationship between free agency players and their age  
+-   What teams will have more free agency players upcoming? </br>
+
+6.  What are the 20 MVP players based on their earns?  
+
+-   Based on avg year, total guaranteed and fully guaranteed amounts
+    </br>
+
+7.  What teams have the highest fully guaranteed expenses?
+
+-   Join coach data to see which team have the most guaranteed expenses
+    per year </br>
+
+8.  What is the relationship between coach salaries and their records?  
+
+-   Considering their number of wins, losses, ties, championships </br>
 
 ## Group Members
 
