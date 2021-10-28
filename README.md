@@ -78,18 +78,20 @@ Nannan Wang; Muxin Hua; Jose Cesario.
     -   Join with coach data to see if these teams tend to pay more to
         their coaches too.  
     -   Join with coach record data to see if high salary related to
-        coach career history.  
-        &lt;&lt;&lt;&lt;&lt;&lt;&lt; HEAD </br> =======
+        coach career history. </br>
 -   How many players will be free agency by 2022?
-    -   Check the relationship between free agency players and their age
-    -   What teams will have more free agency players upcoming?
+    -   Check the relationship between free agency players and their
+        age  
+    -   What teams will have more free agency players upcoming? </br>
 -   What are the 20 MVP players based on their earns?
     -   Based on avg year, total guaranteed and fully guaranteed amounts
+        </br>
 -   What teams have the highest fully guaranteed expenses?
     -   Join coach data to see which team have the most guaranteed
-        expenses per year
+        expenses per year </br>
 -   What is the relationship between coach salaries and their records?
     -   Considering their number of wins, losses, ties, championships
+        </br>
 
 ## Group Members
 
