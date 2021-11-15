@@ -141,6 +141,19 @@ rownames(player_salary_) <- c(1:nrow(player_salary_))
 
 player_salary_$agency_time <- as.numeric(player_salary_$agency_time)
 ```
+#### 5, Fiex abnormal data
+Replace age larger than 50 or smaller than 15 with mean age of the rest age data.
+```{r}
+age_mean <- player_salary_ %>% filter(age>15) %>% filter(age<50) %>% select(age)%>% summarize_each(funs(mean))
+
+player_salary_[player_salary_$age < 15, age] <- age_mean
+player_salary_[player_salary_$age > 50, age] <- age_mean
+```
+There are three 0 values in *avg_year*, so we just delete them.
+```{r}
+player_salary_ <- player_salary_[player_salary_$avg_year != 0,]
+```
+
 ```{r}
 player_salary <- player_salary_
 coach_record <- coach_record_
@@ -150,57 +163,160 @@ coach_salary <- coach_salary_
 
 ## Topics and Analysis
 
+### What are the variables related to high salary of players?
+#### position
+##### Average highest
+```{r}
+# unique(player_salary$position)#29 positions in the data
+
+# Select columns of position, avg_year, player to find positions with the highest salary
+
+position_sub<- player_salary[c('position','avg_year')]%>%
+  group_by(position)
+
+p <- position_sub %>%
+      summarize_each(funs(mean)) %>%
+      arrange(desc(avg_year)) %>%
+      head(10) %>%
+      select(position) %>%
+      inner_join(position_sub, by='position') %>% 
+      group_by(position) %>%
+      ggplot(aes(x=position, y=avg_year))+
+      geom_boxplot(aes(fill=avg_year)) +
+      theme(axis.text.x = element_text(angle=90, hjust = 1))
+p + stat_summary(fun=mean, color='darkred', geom='point') #red dot identifies the mean value
+```
+Though the boxplot quartiles are minimized by the outliers, the position with the highest yearly pay is **quarterback**. To clear see the tendency, zoom in to see the average values.
 
 
+```{r}
+p + stat_summary(fun=mean, color='darkred', geom='point') +
+    coord_trans(x = "identity", y = "identity", xlim = NULL, ylim = c(0,6e+6))
 
+```
+##### Top highest in each position
+We have known that the highest average is **quarterback**, but when we look at medians, they are not as much different as averages. The "outliers" make this discrepancy, so I would take a look at the top 10 ouliers for each group. 
+```{r}
+top_10_each_position <- position_sub %>%
+                          summarize_each(funs(mean)) %>%
+                          arrange(desc(avg_year)) %>%
+                          head(10) %>%
+                          select(position) %>%
+                          inner_join(position_sub, by='position') %>% 
+                          group_by(position) %>%
+                          slice_max(order_by = avg_year, n = 10)
 
+ggplot(top_10_each_position, aes(x=position, y=avg_year))+
+      geom_boxplot() +
+      theme(axis.text.x = element_text(angle=90, hjust = 1))
 
+```
+Even in the most-paid subset, **quarterback** has the obvious highest yearly pay.
 
+#### age
+To look at if age affect salary, we will first look at the most paid players in each position to see their age distribution.
+```{r}
+player_salary %>% group_by(position) %>% slice_max(order_by = avg_year, n = 10) %>%
+  ggplot(aes(x=age)) + 
+  geom_histogram(binwidth = 2,
+                 color='black',
+                 fill='white')+
+   geom_density() +
+   geom_density(alpha=.2, fill='#FF6666')+
+   geom_vline(aes(xintercept=mean(age, na.rm=T)),
+               color="red", linetype="dashed", size=1)
+```
+We can tell that the age of most top-paid players are concentrated around 26, and the overall distribution is slightly right-skewed.
+```{r}
+player_salary %>%
+  ggplot(aes(x=age)) + 
+  geom_histogram(binwidth = 2,
+                 color='black',
+                 fill='white')+
+   # geom_density(alpha=.2, fill="#FF6666")+
+   geom_vline(aes(xintercept=mean(age, na.rm=T)),
+               color="red", linetype="dashed", size=1)
+```
+The overall age distribution has a very similar tendency to the top-paid one, the right-skewness is easier to identify. 30 seems like a division -- the number of frequency drops drasctially after 30. 
 
+#### team
+To look at the effect of team, we will look at both highest paid positions for each team and average pay for each team.  
 
-Your final project consists of a written report and a presentation (uploaded to VidGrid), to be turned in instead of a final exam. In this project, you will select a topic, acquire data from one or more sources, and present any interesting findings you might come across as you explore your data.
+```{r}
+# Average
+# head(player_salary)
+# player_salary %>% group_by(team) %>% select(c('team','avg_year')) %>% summarize_each(funs(mean)) %>%
+#   ggplot(aes(x=team))+geom_boxplot() + theme(axis.text.x = element_text(angle=90, hjust = 1))
 
-## Ground rules
+p <-player_salary[,c('team','avg_year')] %>% group_by(team) %>%
+      summarize_each(funs(mean)) %>%
+      arrange(desc(avg_year)) %>%
+head(32) %>%
+select(team) %>%
+inner_join(player_salary[,c('team','avg_year')], by='team') %>%
+group_by(team)%>%
+ggplot(aes(x=team, y=avg_year))+
+geom_boxplot(aes(fill=avg_year))+
+theme(axis.text.x = element_text(angle=90, hjust = 1))
+p + stat_summary(fun=mean, color='darkred', geom='point') #red dot identifies the mean value
+```
+There are some fluctuations, zoom in to identify the tendency.
+```{r}
+p + stat_summary(fun=mean, color='darkred', geom='point') +
+    coord_trans(x = "identity", y = "identity", xlim = NULL, ylim = c(0,4e+6))
+```
+Unlike the position, there is not an outstanding best-paid team, rather, there are few less-paid teams, so let's look at the bar plot.
+```{r}
+less_team <- player_salary[,c('team','avg_year')] %>% 
+      group_by(team) %>%
+      summarize_each(funs(mean)) %>%
+      arrange(avg_year) %>%
+      head(16) %>%
+      select(team) %>%
+      inner_join(player_salary[,c('team','avg_year')], by='team') %>%
+      group_by(team) %>% 
+      summarize_each(funs(mean)) %>% 
+      mutate(Rate='Lo')
+hi_team <- player_salary[,c('team','avg_year')] %>% 
+      group_by(team) %>%
+      summarize_each(funs(mean)) %>%
+      arrange(desc(avg_year)) %>%
+      head(16) %>%
+      select(team) %>%
+      inner_join(player_salary[,c('team','avg_year')], by='team') %>%
+      group_by(team) %>% 
+      arrange(desc(avg_year)) %>%  
+      summarize_each(funs(mean)) %>%
+      mutate(Rate='Hi')
+hi_low_team <- rbind(hi_team, less_team)
 
--   You may work in teams of up to 3 people, but each member of the team should contribute approximately evenly (I will measure this using your git contributions)
+ggplot(hi_low_team, aes(x=team, y=avg_year))+
+  theme(axis.text.x = element_text(angle=90, hjust = 1))+
+  geom_bar(stat = 'identity')
+  # facet_grid(. ~ Rate)
+```
+The *Cowboy*, *Rams* obviously has lower average salary than the other teams. We know that *headquarter* is the position to have higher salary, so we want to know if these teams are paying lower salary depends on positions.
+```{r}
+all_team <- player_salary[,c('avg_year', 'position')]  %>% 
+                group_by(position) %>%
+                summarise_each(funs(mean))%>%
+                mutate(Distr = 'All')
 
--   Your dataset(s)
+Cowboy_team <- 
+            player_salary[player_salary$team=='Cowboys' ,c('avg_year', 'position')]%>% 
+                group_by(position) %>%
+                summarise_each(funs(mean))%>%
+                mutate(Distr ='Cowboy')
 
-    -   should be fun (something you enjoy)!
+Rams_team <- player_salary[player_salary$team=='Rams' ,c('avg_year', 'position')] %>% 
+                group_by(position) %>%
+                summarise_each(funs(mean))%>%
+                mutate(Distr ='Rams') 
 
-    -   should have at least 1000 records and at least 5 variables
-
-    -   must include at least one meaningful categorical variable and one meaningful numeric variable (these can be derived, if you are e.g. working with text or image data)
-
-    -   must not be published in a textbook or have a published analysis unless
-
-        -   you get prior permission and
-        -   your analysis is very different from what has previously been published
-
-    -   must be something that you can make available to the entire class (so e.g. proprietary datasets from work or other sources aren't acceptable)
-
-    -   should be on a topic of general interest - something you could discuss with your parents or grandparents
-
--   You should use GitHub to track your project throughout its life cycle. You should commit your changes and push frequently, and before you start working on the project, you should pull (this will minimize merge conflicts).
-
--   Your work should be reproducible from start to finish. Do not modify the data by hand! I should be able to take the original data and your repository and go through your analysis from start to finish on my own machine.
-
--   You **should not have to do any complicated statistical modeling for this project.** Any modeling you do must be explained in a way that is comprehensible to everyone in the class (and they may not have the same background as you do!)
-
--   Your project should use what you have learned (and what you will learn) about data visualization, data wrangling, programming, functions, interactive graphics, and dynamic documents.
-
--   Your written report should be approximately $2n + 1$ pages (or $450\times(2n + 1)$ words), where $n$ is the number of people in your group. The extra page is to allow you space to describe your dataset, methods, and conclusions. The report should be grammatically correct, factually correct, with appropriate references, including to the software packages you used to create it.
-
--   Your presentation should include slides (made using beamer, xaringan, or another compiled document) or a poster that highlight(s) the findings you have presented in your report. Each member of your group must participate in the presentation. Your presentation should be approximately $4\times(n+1)$ minutes long.
-
--   You will be expected to peer-evaluate two other groups presentations and/or reports.
-
-## Data Sources
-
-Here are some potential sources of interesting and/or fun data:
-
--   [Data is Plural](https://docs.google.com/spreadsheets/d/1wZhPLMCHKJvwOkP4juclhjFgqIY8fQFMemwKL2c64vk/edit#gid=0) archive
-
--   [TidyTuesday Archive](https://github.com/rfordatascience/tidytuesday)
-
--   [Data.gov](https://catalog.data.gov/dataset) The US government data archive
+position_team <- rbind(all_team, Cowboy_team, Rams_team)
+ggplot(position_team, aes(x=position, y=avg_year))+
+  theme(axis.text.x = element_text(angle=90, hjust = 1))+
+  geom_bar(stat = 'identity')+
+  facet_grid(Distr ~ .)
+```
+Interestingly, neither of these follow the overall trend, but they both follow the same pattern: paying more to *4-3 defensive-tackle* and *left-tackle*. 
