@@ -146,8 +146,8 @@ Replace age larger than 50 or smaller than 15 with mean age of the rest age data
 ```{r}
 age_mean <- player_salary_ %>% filter(age>15) %>% filter(age<50) %>% select(age)%>% summarize_each(funs(mean))
 
-player_salary_[player_salary_$age < 15, age] <- age_mean
-player_salary_[player_salary_$age > 50, age] <- age_mean
+player_salary_[player_salary_$age < 15, player_salary_$age] <- age_mean
+player_salary_[player_salary_$age > 50, player_salary_$age] <- age_mean
 ```
 There are three 0 values in *avg_year*, so we just delete them.
 ```{r}
