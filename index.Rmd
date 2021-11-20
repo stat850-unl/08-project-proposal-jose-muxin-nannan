@@ -190,6 +190,7 @@ ggplot(df_20, aes(x= position, color= position)) +
     labs(x = "Position") +
   ggtitle("MVP's per position")
 ```
+The position that shows more MVP's is the quarterback.
 
 
 
