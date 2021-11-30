@@ -116,7 +116,7 @@ coach_salary_ <- rename(coach_salary_, 'Annual_salary'='income')
 ```
 
 * *Net_salary*
-```{r}
+```{r warning=FALSE}
 # Remove dollar sign and trim
 for (i in 1:nrow(coach_salary_)){
   coach_salary_[i, 'Net_worth'] <- gsub('\\$', '', coach_salary_[i, 'Net_worth'])
@@ -138,7 +138,7 @@ for (i in 4:ncol(coach_record_))
 
 ##### 4. Separate variables  
 * **player_salary**
-```{r}
+```{r warning=FALSE}
 
 player_salary_ <- player_salary %>% separate(free_agency, c('agency_time', 'type'),' ')
 # There's warning of NA's in the dataset
