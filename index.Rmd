@@ -14,20 +14,32 @@ library(tidyr)
 ## Prepare the data for analysis
 ### Read in data
 ```{r}
-#install package 'xlsx' if not installed yet
-if (!"xlsx" %in% installed.packages()) install.packages('xlsx')
-library('xlsx')
-
-#read in data sheets
-sheet.index <- 1:3
-data.list <- list()
-for(i in sheet.index)
-  data.list[[i]]<-read.xlsx('football_salaries.xls', sheetIndex = i)
-
-# Rename the datasets as we wanted
-player_salary <- data.list[[1]]
-coach_salary <- data.list[[2]]
-coach_record <- data.list[[3]]
+# #install package 'xlsx' if not installed yet
+# if (!"xlsx" %in% installed.packages()) install.packages('xlsx')
+# library('xlsx')
+# 
+# #read in data sheets
+# sheet.index <- 1:3
+# data.list <- list()
+# for(i in sheet.index)
+#   data.list[[i]]<-read.xlsx('football_salaries.xls', sheetIndex = i)
+# 
+# # Rename the datasets as we wanted
+# player_salary <- data.list[[1]]
+# coach_salary <- data.list[[2]]
+# coach_record <- data.list[[3]]
+```
+Read from different files
+```{r}
+player_salary <- read.csv('player_salary.csv',
+                    header = TRUE,
+                    sep = ',')
+coach_salary <- read.csv('coach_salary.csv',
+                    header = TRUE,
+                    sep = ',')
+coach_record <- read.csv('coach_record.csv',
+                    header = TRUE,
+                    sep = ',')
 ```
 
 ### Cleaning data
@@ -104,7 +116,7 @@ coach_salary_ <- rename(coach_salary_, 'Annual_salary'='income')
 ```
 
 * *Net_salary*
-```{r}
+```{r warning=FALSE}
 # Remove dollar sign and trim
 for (i in 1:nrow(coach_salary_)){
   coach_salary_[i, 'Net_worth'] <- gsub('\\$', '', coach_salary_[i, 'Net_worth'])
@@ -126,7 +138,7 @@ for (i in 4:ncol(coach_record_))
 
 ##### 4. Separate variables  
 * **player_salary**
-```{r}
+```{r warning=FALSE}
 
 player_salary_ <- player_salary %>% separate(free_agency, c('agency_time', 'type'),' ')
 # There's warning of NA's in the dataset
@@ -146,8 +158,8 @@ Replace age larger than 50 or smaller than 15 with mean age of the rest age data
 ```{r}
 age_mean <- player_salary_ %>% filter(age>15) %>% filter(age<50) %>% select(age)%>% summarize_each(funs(mean))
 
-player_salary_[player_salary_$age < 15, player_salary_$age] <- age_mean
-player_salary_[player_salary_$age > 50, player_salary_$age] <- age_mean
+player_salary_[player_salary_$age < 15, 'age'] <- age_mean
+player_salary_[player_salary_$age > 50, 'age'] <- age_mean
 ```
 There are three 0 values in *avg_year*, so we just delete them.
 ```{r}
@@ -193,7 +205,7 @@ df_MVP <- df_MVP[order(df_MVP$MVP_value),]
 # Extracting the 20 highest MVP_values
 df_20 <- tail(df_MVP, n= 20)
 
-# The 20 most valuable players (MVP) are:: 
+# The 20 most valuable players (MVP) are:
 df_20$player
 
 # Which position has more MVP's?
@@ -376,6 +388,8 @@ ggplot(position_team, aes(x=position, y=avg_year))+
 ```
 Interestingly, neither of these follow the overall trend, but they both follow the same pattern: paying more to *4-3 defensive-tackle* and *left-tackle*. 
 
+
+## NanNan
 ```{r}
 head(football_salaries)
 football <- football_salaries
