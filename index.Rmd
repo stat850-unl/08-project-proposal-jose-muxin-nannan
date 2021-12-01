@@ -172,8 +172,47 @@ coach_record <- coach_record_
 coach_salary <- coach_salary_
 ```
 
-
 ## Topics and Analysis
+
+# 5. How many players will be free agency by 2022?
+
+
+```{r}
+# Importing package
+library(readxl)
+# Loading dataframe
+df_salaries <- read_excel("football_salaries.xls")
+# Removing strings from column 
+#gsub or str_replace
+```
+# 6. What are the 20 MVP players based on their earns?
+```{r}
+# Creating column with MVP value 
+df_MVP <- df_salaries %>% 
+  rowwise() %>% 
+  mutate(MVP_value = sum(avg_year, total_guaranteed, fully_guaranteed))
+# Removing duplicated players'name
+df_MVP <- df_MVP %>% distinct(player, .keep_all= TRUE)
+# Organizing it by sorting as ascending values
+df_MVP <- df_MVP[order(df_MVP$MVP_value),]
+# Extracting the 20 highest MVP_values
+df_20 <- tail(df_MVP, n= 20)
+# The 20 most valuable players (MVP) are:
+df_20$player
+# Which position has more MVP's?
+df_20$position <- as.factor(df_20$position) # making position as factor
+ggplot(df_20, aes(x= position, color= position)) +
+    geom_bar(stat = "count") +
+    labs(x = "Position") +
+  ggtitle("MVP's per position")
+```
+The position that shows more MVP's is the quarterback.
+
+# 7. What teams have the highest fully guaranteed expenses?
+
+# 8. What is the relationship between coach salaries and their records?
+
+
 
 ### What are the variables related to high salary of players?
 #### position
