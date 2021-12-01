@@ -174,6 +174,7 @@ coach_salary <- coach_salary_
 
 ## Topics and Analysis
 
+<<<<<<< HEAD
 # 5. How many players will be free agency by 2022?
 
 # Test
@@ -184,6 +185,21 @@ library(readxl)
 df_salaries <- read_excel("football_salaries.xls")
 # Removing strings from column 
 #gsub or str_replace
+=======
+<<<<<<< HEAD
+# 5. How many players will be free agency by 2022?
+```{r}
+# Importing package
+library(readxl)
+
+# Loading dataframe
+df_salaries <- read_excel("football_salaries.xls")
+
+# Removing strings from column 
+#gsub or str_replace
+
+
+>>>>>>> 4b8891c76eb24b955065e85af62b4837b8d85850
 ```
 # 6. What are the 20 MVP players based on their earns?
 ```{r}
@@ -191,6 +207,7 @@ df_salaries <- read_excel("football_salaries.xls")
 df_MVP <- df_salaries %>% 
   rowwise() %>% 
   mutate(MVP_value = sum(avg_year, total_guaranteed, fully_guaranteed))
+<<<<<<< HEAD
 # Removing duplicated players'name
 df_MVP <- df_MVP %>% distinct(player, .keep_all= TRUE)
 # Organizing it by sorting as ascending values
@@ -201,6 +218,24 @@ df_20 <- tail(df_MVP, n= 20)
 df_20$player
 # Which position has more MVP's?
 df_20$position <- as.factor(df_20$position) # making position as factor
+=======
+
+# Removing duplicated players'name
+df_MVP <- df_MVP %>% distinct(player, .keep_all= TRUE)
+
+# Organizing it by sorting as ascending values
+df_MVP <- df_MVP[order(df_MVP$MVP_value),]
+
+# Extracting the 20 highest MVP_values
+df_20 <- tail(df_MVP, n= 20)
+
+# The 20 most valuable players (MVP) are:
+df_20$player
+
+# Which position has more MVP's?
+df_20$position <- as.factor(df_20$position) # making position as factor
+
+>>>>>>> 4b8891c76eb24b955065e85af62b4837b8d85850
 ggplot(df_20, aes(x= position, color= position)) +
     geom_bar(stat = "count") +
     labs(x = "Position") +
@@ -208,12 +243,26 @@ ggplot(df_20, aes(x= position, color= position)) +
 ```
 The position that shows more MVP's is the quarterback.
 
+<<<<<<< HEAD
 # 7. What teams have the highest fully guaranteed expenses?
 
 # 8. What is the relationship between coach salaries and their records?
 
 
 
+=======
+
+
+
+
+
+
+# 7. What teams have the highest fully guaranteed expenses?
+
+# 8. What is the relationship between coach salaries and their records?
+
+=======
+>>>>>>> 4b8891c76eb24b955065e85af62b4837b8d85850
 ### What are the variables related to high salary of players?
 #### position
 ##### Average highest
@@ -238,6 +287,7 @@ p <- position_sub %>%
 p + stat_summary(fun=mean, color='darkred', geom='point') #red dot identifies the mean value
 ```
 Though the boxplot quartiles are minimized by the outliers, the position with the highest yearly pay is **quarterback**. To clear see the tendency, zoom in to see the average values.
+>>>>>>> e9d3f5ca00e1465ff388f68756a3d49d7afc548f
 
 
 ```{r}
