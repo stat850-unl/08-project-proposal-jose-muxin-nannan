@@ -174,17 +174,37 @@ coach_salary <- coach_salary_
 
 ## Topics and Analysis
 
-### Jose
+#### Jose ####
 # 5. How many players will be free agency by 2022?
 ```{r}
 # Importing package
 library(readxl)
+library(stringr)
+
 # Loading dataframe
 df_salaries <- read_excel("football_salaries.xls")
-# Removing strings from column 
-#gsub or str_replace
 
+# Removing strings from column 
+df_salaries$free_agency <- substr(df_salaries$free_agency, 0, 4)
+df_salaries <- df_salaries[df_salaries$free_agency != NaN,]
+
+# Cheking how many player will be free agency by 2022
+df_salaries$free_agency <- as.numeric(df_salaries$free_agency)
+df_free <- df_salaries %>% dplyr::filter(free_agency >= 2022)
+nrow(df_free)
+
+# Plotting
+df_agency <- df_salaries
+df_agency$free_agency <- as.factor(df_salaries$free_agency)
+
+ggplot(df_agency, aes(x= free_agency, color="free_agency")) +
+    geom_bar(stat = "count", fill="white") +
+    labs(x = "Free Agency") +
+  #ylim(0, 2500) +
+  scale_y_continuous(breaks = seq(0, 2500, by = 250))
+  ggtitle("Number of players by free agency years")
 ```
+There will be 2208 free agency players by 2022 
 # 6. What are the 20 MVP players based on their earns?
 ```{r}
 # Creating column with MVP value 
@@ -226,6 +246,7 @@ ggplot(df_20, aes(x= position, color= position)) +
 The position that shows more MVP's is the quarterback.
 
 # 7. What teams have the highest fully guaranteed expenses?
+
 
 # 8. What is the relationship between coach salaries and their records?
 
