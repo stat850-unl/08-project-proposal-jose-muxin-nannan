@@ -246,7 +246,17 @@ ggplot(df_20, aes(x= position, color= position)) +
 The position that shows more MVP's is the quarterback.
 
 # 7. What teams have the highest fully guaranteed expenses?
+```{r}
+# Grouping by teams
+library(dplyr)
+df_fully <- df_salaries %>% group_by(team) %>% dplyr::summarize(fully_guaranteed_mean=(mean(fully_guaranteed)))
 
+ggplot(df_salaries, aes(x= team, y=fully_guaranteed)) +
+    geom_bar() +
+    labs(x = "Position") +
+  ggtitle("MVP's per position")
+```
+The Bears team has the highest fully guaranteed expenses (4226673 dollars), followed by Red Skins (4018702 dollars) and Browns (3886874).
 
 # 8. What is the relationship between coach salaries and their records?
 
