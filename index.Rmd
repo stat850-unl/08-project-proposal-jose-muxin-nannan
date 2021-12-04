@@ -507,7 +507,7 @@ Interestingly, neither of these follow the overall trend, but they both follow t
 
 ```{r}
 # average salary of each position
-posSa <- football %>% group_by(football$position) %>%
+posSa <- player_salary_ %>% group_by(player_salary_$position) %>%
   summarise(avg <- mean(total_value))
 posSa <- as.data.frame(posSa)
 posSa[order(posSa$`avg <- mean(total_value)`,decreasing=T),]
