@@ -307,7 +307,7 @@ ggplot(player_salary, aes(x= reorder(team, +fully_guaranteed), y=fully_guarantee
 
 The Bears team has the highest fully guaranteed expenses (~4,2 M dollars), followed by Red Skins (~4,1 M dollars) and Browns (~3,8 M dollars).
 
-##### 8. What is the relationship between coach salaries and their records?####
+# 8. What is the relationship between coach salaries and their records?
 
 ```{r}
 library(scales)
@@ -331,6 +331,12 @@ ggplot(data=subset(df_coach, !is.na(Annual_salary_M)), aes(x= W, y=Annual_salary
     labs(x = "Wins", y= "Salary ($)") + 
   theme(legend.position = "none") +
   ggtitle("Relationship between coach records (wins) and their salaries")
+
+# Test
+cor(df_coach$W, df_coach$Annual_salary)
+cor_val <- ggplot(data=df_coach, aes(x=W, y= Annual_salary))+
+  geom_col(color ="blue")
+cor_val
 ```
 ## Part B: Data analysis  
 ### 1, What are the variables related to high salary of players?
