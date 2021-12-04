@@ -498,6 +498,13 @@ ggplot(position_team, aes(x=position, y=avg_year))+
 Interestingly, neither of these follow the overall trend, but they both follow the same pattern: paying more to *4-3 defensive-tackle* and *left-tackle*.
 
 ## NanNan
+![cover](GoBigRed.png)
+![Stadium](Stadium.jpg)
+![team](team.jpg)
+![football positions](footballPosition.png)
+
+
+
 ```{r}
 # average salary of each position
 posSa <- football %>% group_by(football$position) %>%
