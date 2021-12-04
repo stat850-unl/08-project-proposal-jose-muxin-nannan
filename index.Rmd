@@ -229,27 +229,15 @@ coach_salary <- coach_salary_
 # 5. How many players will be free agency by 2022?
 
 ```{r}
-# Importing package
-library(readxl)
-library(stringr)
-
-# Loading dataframe
-df_salaries <- read_excel("football_salaries.xls")
-
-# Removing strings from column 
-df_salaries$free_agency <- substr(df_salaries$free_agency, 0, 4)
-df_salaries <- df_salaries[df_salaries$free_agency != NaN,]
-
 # Cheking how many player will be free agency by 2022
-df_salaries$free_agency <- as.numeric(df_salaries$free_agency)
-df_free <- df_salaries %>% dplyr::filter(free_agency >= 2022)
+df_free <- player_salary %>% dplyr::filter(agency_time >= 2022)
 nrow(df_free)
 
 # Plotting
-df_agency <- df_salaries
-df_agency$free_agency <- as.factor(df_salaries$free_agency)
+df_agency <- player_salary
+df_agency$agency_time <- as.factor(df_agency$agency_time)
 
-ggplot(df_agency, aes(x= free_agency, color="free_agency")) +
+ggplot(df_agency, aes(x= agency_time, color="agency_time")) +
     geom_bar(stat = "count", fill="white") +
     labs(x = "Free Agency") +
   #ylim(0, 2500) +
@@ -257,11 +245,13 @@ ggplot(df_agency, aes(x= free_agency, color="free_agency")) +
   ggtitle("Number of players by free agency years")
 ```
 
-There will be 2208 free agency players by 2022 \# 6. What are the 20 MVP players based on their earns?
+There will be 2208 free agency players by 2022 
+
+# 6. What are the 20 MVP players based on their earns?
 
 ```{r}
 # Creating column with MVP value 
-df_MVP <- df_salaries %>% 
+df_MVP <- player_salary %>% 
   rowwise() %>% 
   mutate(MVP_value = sum(avg_year, total_guaranteed, fully_guaranteed))
 
@@ -291,9 +281,10 @@ df_20$player
 # Which position has more MVP's?
 df_20$position <- as.factor(df_20$position) # making position as factor
 
-ggplot(df_20, aes(x= position, color= position)) +
+ggplot(df_20, aes(x= position, color= position, fill= position)) +
     geom_bar(stat = "count") +
     labs(x = "Position") +
+  theme(legend.position = "none")+
   ggtitle("MVP's per position")
 ```
 
@@ -304,18 +295,43 @@ The position that shows more MVP's is the quarterback.
 ```{r}
 # Grouping by teams
 library(dplyr)
-df_fully <- df_salaries %>% group_by(team) %>% dplyr::summarize(fully_guaranteed_mean=(mean(fully_guaranteed)))
+df_fully <- player_salary %>% group_by(team) %>% dplyr::summarize(fully_guaranteed_mean=(mean(fully_guaranteed)))
 
-ggplot(df_salaries, aes(x= team, y=fully_guaranteed)) +
-    geom_bar() +
-    labs(x = "Position") +
-  ggtitle("MVP's per position")
+ggplot(player_salary, aes(x= reorder(team, +fully_guaranteed), y=fully_guaranteed, color= team, fill= team)) +
+    geom_col() +
+    labs(x = "Team", y= "Fully guaranteed expenses ($)") + 
+  theme(legend.position = "none") +
+  ggtitle("Teams with highest fully guaranteed expenses") + 
+    coord_flip()
 ```
 
-The Bears team has the highest fully guaranteed expenses (4226673 dollars), followed by Red Skins (4018702 dollars) and Browns (3886874).
+The Bears team has the highest fully guaranteed expenses (~4,2 M dollars), followed by Red Skins (~4,1 M dollars) and Browns (~3,8 M dollars).
 
-# 8. What is the relationship between coach salaries and their records?
+##### 8. What is the relationship between coach salaries and their records?####
 
+```{r}
+library(scales)
+coach_record <- rename(coach_record, name = Name)
+df_coach <- coach_record %>% merge(coach_salary, by = "name", all.x = TRUE)
+
+df_coach$Annual_salary <- as.numeric(df_coach$Annual_salary)
+
+#coeff <-10
+#ggplot(head(df_coach, 80), aes(x= Yrs)) +
+#  geom_bar(aes(y=Pct*10), stat= "identity", size=.1, color="black", alpha=.4) + 
+#  geom_line( aes(y=Annual_salary / coeff), size=2)
+
+
+df_coach <- df_coach %>% na.rm=TRUE %>%  mutate(Annual_salary_M = paste(format(round(Annual_salary / 1000000, 1), trim = TRUE), "M"))
+
+df_coach$Annual_salary_M <- as.numeric(df_coach$Annual_salary_M)
+
+ggplot(data=subset(df_coach, !is.na(Annual_salary_M)), aes(x= W, y=Annual_salary_M), na.omit=T) +
+    geom_col() +
+    labs(x = "Wins", y= "Salary ($)") + 
+  theme(legend.position = "none") +
+  ggtitle("Relationship between coach records (wins) and their salaries")
+```
 ## Part B: Data analysis  
 ### 1, What are the variables related to high salary of players?
 As the dataset is related to the income or value of a player, so the first question we care about is what makes their income so different. Basing on the variables in the data, we propose following:
