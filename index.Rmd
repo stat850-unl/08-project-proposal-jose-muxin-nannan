@@ -498,48 +498,6 @@ ggplot(position_team, aes(x=position, y=avg_year))+
 Interestingly, neither of these follow the overall trend, but they both follow the same pattern: paying more to *4-3 defensive-tackle* and *left-tackle*.
 
 ## NanNan
-
-```{r}
-head(football_salaries)
-football <- football_salaries
-football <- na.omit(football)
-a <- c(0,323,2020,1)
-football <- football[football$age!=0,]
-football <- football[football$age!=323,]
-football <- football[football$age!=2020,]
-football <- football[football$age!=1,]
-
-library(tidyverse)
-# number of players of each position
-frequency <- football %>% group_by(football$position)%>%
-  summarise(n = n())
-frequency <- as.data.frame(frequency)
-frequency[order(frequency$n,decreasing = T),]
-```
-
-defensive-back is the position that has the most players across all positions; offensive-line is the position that has the second most players.
-
-```{r}
-# average salary of each team
-teamSa <- football %>% group_by(football$team) %>%
-  summarise(avg <- mean(total_value))
-teamSa <- as.data.frame(teamSa)
-teamSa[order(teamSa$`avg <- mean(total_value)`,decreasing=T),]
-```
-
-players in Vikings make the most across all teams.
-
-```{r}
-# average salary of each age group
-unique(football$age)
-ageSa <- football %>% group_by(football$age) %>%
-  summarise(avg <- mean(total_value))
-ageSa <- as.data.frame(ageSa)
-ageSa[order(ageSa$`avg <- mean(total_value)`,decreasing=T),]
-```
-
-players older than 30 could make much more than those younger than 30
-
 ```{r}
 # average salary of each position
 posSa <- football %>% group_by(football$position) %>%
@@ -549,20 +507,52 @@ posSa[order(posSa$`avg <- mean(total_value)`,decreasing=T),]
 ```
 
 quarterback is the position that makes the most money across all positions
+```{r}
+library(tidyverse)
+# number of players of each position
+frequency <- player_salary_ %>% group_by(player_salary_$position)%>%
+  summarise(n = n())
+frequency <- as.data.frame(frequency)
+frequency[order(frequency$n,decreasing = T),]
+```
+
+defensive-back is the position that has the most players across all positions; offensive-line is the position that has the second most players.
+
+```{r}
+# average salary of each team
+teamSa <- player_salary_  %>% group_by(player_salary_ $team) %>%
+  summarise(avg <- mean(total_value))
+teamSa <- as.data.frame(teamSa)
+teamSa[order(teamSa$`avg <- mean(total_value)`,decreasing=T),]
+```
+
+players in Vikings make the most across all teams.
+
+```{r}
+# average salary of each age group
+unique(player_salary$age)
+ageSa <- player_salary_  %>% group_by(player_salary_ $age) %>%
+  summarise(avg <- mean(total_value))
+ageSa <- as.data.frame(ageSa)
+ageSa[order(ageSa$`avg <- mean(total_value)`,decreasing=T),]
+```
+
+players older than 30 could make much more than those younger than 30
 
 ```{r}
 # age and total value correlation
-cor(football$total_value,football$age)
-corAge <- ggplot(data=football_salaries,aes(x=age,y=total_value))+xlim(0, 70)+geom_point(color ="darkgreen")
+cor(player_salary_ $total_value,player_salary_ $age)
+corAge <- ggplot(data=player_salary_ ,aes(x=age,y=total_value))+xlim(0, 70)+geom_point(color ="darkgreen")
 corAge
 ```
 
 It shows that age is positively correlated with salary but it's not strong correlation;
+From the scatter plot, we could see that players with age around 30 make more money compared to other age groups, which is consistent with finding from previous part. 
 
 ```{r}
 # is total value positively correlated with fully guaranteed?
-cor(football$total_value,football$fully_guaranteed)
-corValue <- ggplot(data=football_salaries,aes(x=total_value,y=fully_guaranteed))+
+cor(player_salary_ $total_value,player_salary_ $fully_guaranteed)
+corValue <- ggplot(data=player_salary_ ,aes(x=total_value,y=fully_guaranteed))+
   geom_point(color ="darkgreen")
 corValue
 ```
