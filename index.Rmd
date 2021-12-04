@@ -209,6 +209,8 @@ player_salary_[player_salary_$position=='3-4-outside-linebacker','position'] <- 
 ```
 ```{r}
 unique(player_salary_$position)
+unique(football_salaries$age)
+
 ```
 
 
@@ -512,11 +514,10 @@ library(tidyverse)
 frequency <- football %>% group_by(football$position)%>%
   summarise(n = n())
 frequency <- as.data.frame(frequency)
-x
 frequency[order(frequency$n,decreasing = T),]
 ```
 
-defensive-back is the position that has the most players across all positions offensive-line is the position that has the second most players.
+defensive-back is the position that has the most players across all positions; offensive-line is the position that has the second most players.
 
 ```{r}
 # average salary of each team
@@ -552,13 +553,18 @@ quarterback is the position that makes the most money across all positions
 ```{r}
 # age and total value correlation
 cor(football$total_value,football$age)
+corAge <- ggplot(data=football_salaries,aes(x=age,y=total_value))+xlim(0, 70)+geom_point(color ="darkgreen")
+corAge
 ```
 
-It shows that age is positively correlated with salary but it's not strong correlation
+It shows that age is positively correlated with salary but it's not strong correlation;
 
 ```{r}
 # is total value positively correlated with fully guaranteed?
 cor(football$total_value,football$fully_guaranteed)
+corValue <- ggplot(data=football_salaries,aes(x=total_value,y=fully_guaranteed))+
+  geom_point(color ="darkgreen")
+corValue
 ```
 
 It shows that total_value and fully_guaranteed are highly correlated.
