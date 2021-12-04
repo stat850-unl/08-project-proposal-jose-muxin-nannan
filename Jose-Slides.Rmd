@@ -2,22 +2,30 @@
 title: "Jose-Slides"
 author: "Jose Cesario Pinto"
 date: "12/4/2021"
-output: ioslides_presentation
+output:
+  slidy_presentation: default
+  ioslides_presentation: default
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-## Slide with Bullets
+## Number of free agency players by year
 
-- Bullet 1
-- Bullet 2
-- Bullet 3
+```{r, include=FALSE}
+# Libraries used
+library(dplyr)
+library(tidyverse)
+library(tidyr)
+library(ggplot2)
 
-## How many players will be free agency by 2022?
+# Getting data
+player_salary <- read.csv("player_salary_slide.csv",header = T)
+coach_salary <- read.csv("coach_salary_slide.csv",header = T)
+coach_record <- read.csv("coach_record_slide.csv",header = T)
 
-```{r}
+
 # Cheking how many player will be free agency by 2022
 df_free <- player_salary %>% dplyr::filter(agency_time >= 2022)
 nrow(df_free)
@@ -25,19 +33,21 @@ nrow(df_free)
 # Plotting
 df_agency <- player_salary
 df_agency$agency_time <- as.factor(df_agency$agency_time)
+```
 
+```{r}
 ggplot(df_agency, aes(x= agency_time, color="agency_time")) +
-    geom_bar(stat = "count", fill="white") +
+    geom_bar(stat = "count", fill="white", color="blue") +
     labs(x = "Free Agency") +
   #ylim(0, 2500) +
   scale_y_continuous(breaks = seq(0, 2500, by = 250))
-  ggtitle("Number of players by free agency years")
-```
+```  
+
 - There will be 2208 free agency players by 2022 
 
-## What are the 20 MVP players based on their earns?
+## 20 MVP players
 
-```{r}
+```{r, include=FALSE}
 # Creating column with MVP value 
 df_MVP <- player_salary %>% 
   rowwise() %>% 
@@ -68,16 +78,24 @@ df_20$player
 
 # Which position has more MVP's?
 df_20$position <- as.factor(df_20$position) # making position as factor
+```
+```{r}
+df_20 <- as.data.frame(df_20)
+df_20 %>%  arrange(desc(MVP_value)) %>% select("player", "position", "team")
+```
 
+## Position relationship with MVP's  
+
+```{r}
 ggplot(df_20, aes(x= position, color= position, fill= position)) +
     geom_bar(stat = "count") +
     labs(x = "Position") +
-  theme(legend.position = "none")+
-  ggtitle("MVP's per position")
-```
-- The position that shows more MVP's is the quarterback.
+  theme(legend.position = "none")
+```  
 
-## What teams have the highest fully guaranteed expenses?
+- The position that shows more MVP's is the quarterback.  
+
+## Teams with highest fully guaranteed expenses
 
 ```{r}
 # Grouping by teams
@@ -88,33 +106,23 @@ ggplot(player_salary, aes(x= reorder(team, +fully_guaranteed), y=fully_guarantee
     geom_col() +
     labs(x = "Team", y= "Fully guaranteed expenses ($)") + 
   theme(legend.position = "none") +
-  ggtitle("Teams with highest fully guaranteed expenses") + 
     coord_flip()
-```
+```  
+
 - The Bears team has the highest fully guaranteed expenses (~4,2 M dollars), followed by Red Skins (~4,1 M dollars) and Browns (~3,8 M dollars).
 
-# What is the relationship between coach salaries and their records?
+## Relationship between coach records and their salaries
+
+```{r, include=FALSE}
+coach_record <- rename(coach_record, name = Name)
+df_coach <- coach_record %>% merge(coach_salary, by = "name", all.x = TRUE)  %>% 
+  na.omit()
+```  
 
 ```{r}
-library(scales)
-coach_record <- rename(coach_record, name = Name)
-df_coach <- coach_record %>% merge(coach_salary, by = "name", all.x = TRUE)
-
-df_coach$Annual_salary <- as.numeric(df_coach$Annual_salary)
-
-#coeff <-10
-#ggplot(head(df_coach, 80), aes(x= Yrs)) +
-#  geom_bar(aes(y=Pct*10), stat= "identity", size=.1, color="black", alpha=.4) + 
-#  geom_line( aes(y=Annual_salary / coeff), size=2)
-
-
-df_coach <- df_coach %>% na.rm=TRUE %>%  mutate(Annual_salary_M = paste(format(round(Annual_salary / 1000000, 1), trim = TRUE), "M"))
-
-df_coach$Annual_salary_M <- as.numeric(df_coach$Annual_salary_M)
-
-ggplot(data=subset(df_coach, !is.na(Annual_salary_M)), aes(x= W, y=Annual_salary_M), na.omit=T) +
-    geom_col() +
-    labs(x = "Wins", y= "Salary ($)") + 
+ggplot(df_coach, aes(x= Pct*100, y=Annual_salary, color=name)) +
+    geom_point(size=4, alpha=0.6) +
+    labs(x = "Wins (%)", y= "Salary ($)") + 
   theme(legend.position = "none") +
-  ggtitle("Relationship between coach records (wins) and their salaries")
+  coord_trans(x= "identity", y= "identity", xlim= NULL,  ylim= c(0, 10e+6 )) 
 ```
