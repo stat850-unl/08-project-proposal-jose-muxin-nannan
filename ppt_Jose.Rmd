@@ -1,10 +1,8 @@
 ---
-title: "Jose-Slides"
+title: "ppt"
 author: "Jose Cesario Pinto"
 date: "12/4/2021"
-output:
-  slidy_presentation: default
-  ioslides_presentation: default
+output: powerpoint_presentation
 ---
 
 ```{r setup, include=FALSE}
@@ -125,8 +123,7 @@ ggplot(df_coach, aes(x= Pct*100, y=Annual_salary, color=name)) +
     labs(x = "Wins (%)", y= "Salary ($)") + 
   theme(legend.position = "none") +
   coord_trans(x= "identity", y= "identity", xlim= NULL,  ylim= c(0, 10e+6 )) 
-```  
+``` 
 
 ## Thank you!
 ![](martinez.jpeg){width=40%}
-
