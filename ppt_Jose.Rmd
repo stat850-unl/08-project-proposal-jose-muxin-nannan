@@ -1,0 +1,129 @@
+---
+title: "ppt"
+author: "Jose Cesario Pinto"
+date: "12/4/2021"
+output: powerpoint_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Number of free agency players by year
+
+```{r, include=FALSE}
+# Libraries used
+library(dplyr)
+library(tidyverse)
+library(tidyr)
+library(ggplot2)
+
+# Getting data
+player_salary <- read.csv("player_salary_slide.csv",header = T)
+coach_salary <- read.csv("coach_salary_slide.csv",header = T)
+coach_record <- read.csv("coach_record_slide.csv",header = T)
+
+
+# Cheking how many player will be free agency by 2022
+df_free <- player_salary %>% dplyr::filter(agency_time >= 2022)
+nrow(df_free)
+
+# Plotting
+df_agency <- player_salary
+df_agency$agency_time <- as.factor(df_agency$agency_time)
+```
+
+```{r}
+ggplot(df_agency, aes(x= agency_time, color="agency_time")) +
+    geom_bar(stat = "count", fill="white", color="blue") +
+    labs(x = "Free Agency") +
+  #ylim(0, 2500) +
+  scale_y_continuous(breaks = seq(0, 2500, by = 250))
+```  
+
+- There will be 2208 free agency players by 2022 
+
+## 20 MVP players
+
+```{r, include=FALSE}
+# Creating column with MVP value 
+df_MVP <- player_salary %>% 
+  rowwise() %>% 
+  mutate(MVP_value = sum(avg_year, total_guaranteed, fully_guaranteed))
+
+# Removing duplicated players'name
+df_MVP <- df_MVP %>% distinct(player, .keep_all= TRUE)
+# Organizing it by sorting as ascending values
+df_MVP <- df_MVP[order(df_MVP$MVP_value),]
+# Extracting the 20 highest MVP_values
+df_20 <- tail(df_MVP, n= 20)
+# The 20 most valuable players (MVP) are:
+df_20$player
+# Which position has more MVP's?
+df_20$position <- as.factor(df_20$position) # making position as factor
+
+# Removing duplicated players'name
+df_MVP <- df_MVP %>% distinct(player, .keep_all= TRUE)
+
+# Organizing it by sorting as ascending values
+df_MVP <- df_MVP[order(df_MVP$MVP_value),]
+
+# Extracting the 20 highest MVP_values
+df_20 <- tail(df_MVP, n= 20)
+
+# The 20 most valuable players (MVP) are:
+df_20$player
+
+# Which position has more MVP's?
+df_20$position <- as.factor(df_20$position) # making position as factor
+```
+```{r}
+df_20 <- as.data.frame(df_20)
+df_20 %>%  arrange(desc(MVP_value)) %>% select("player", "position", "team")
+```
+
+## Position relationship with MVP's  
+
+```{r}
+ggplot(df_20, aes(x= position, color= position, fill= position)) +
+    geom_bar(stat = "count") +
+    labs(x = "Position") +
+  theme(legend.position = "none")
+```  
+
+- The position that shows more MVP's is the quarterback.  
+
+## Teams with highest fully guaranteed expenses
+
+```{r}
+# Grouping by teams
+library(dplyr)
+df_fully <- player_salary %>% group_by(team) %>% dplyr::summarize(fully_guaranteed_mean=(mean(fully_guaranteed)))
+
+ggplot(player_salary, aes(x= reorder(team, +fully_guaranteed), y=fully_guaranteed, color= team, fill= team)) +
+    geom_col() +
+    labs(x = "Team", y= "Fully guaranteed expenses ($)") + 
+  theme(legend.position = "none") +
+    coord_flip()
+```  
+
+- The Bears team has the highest fully guaranteed expenses (~4,2 M dollars), followed by Red Skins (~4,1 M dollars) and Browns (~3,8 M dollars).
+
+## Relationship between coach records and their salaries
+
+```{r, include=FALSE}
+coach_record <- rename(coach_record, name = Name)
+df_coach <- coach_record %>% merge(coach_salary, by = "name", all.x = TRUE)  %>% 
+  na.omit()
+```  
+
+```{r}
+ggplot(df_coach, aes(x= Pct*100, y=Annual_salary, color=name)) +
+    geom_point(size=4, alpha=0.6) +
+    labs(x = "Wins (%)", y= "Salary ($)") + 
+  theme(legend.position = "none") +
+  coord_trans(x= "identity", y= "identity", xlim= NULL,  ylim= c(0, 10e+6 )) 
+``` 
+
+## Thank you!
+![](martinez.jpeg){width=40%}
