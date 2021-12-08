@@ -571,16 +571,16 @@ The Bears team has the highest fully guaranteed expenses (~4,2 M dollars), follo
 
 # 7. What is the relationship between coach salaries and their records?
 
-```{r echo=F}
+```{r, include=FALSE}
 coach_record <- rename(coach_record, name = Name)
 df_coach <- coach_record %>% merge(coach_salary, by = "name", all.x = TRUE)  %>% 
   na.omit()
+```  
 
-ggplot(df_coach, aes(x= Pct*10, y=Annual_salary, color=name)) +
-    geom_point() +
-    labs(x = "Wins", y= "Salary ($)") + 
+```{r}
+ggplot(df_coach, aes(x= Pct*100, y=Annual_salary, color=name)) +
+    geom_point(size=4, alpha=0.6) +
+    labs(x = "Wins (%)", y= "Salary ($)") + 
   theme(legend.position = "none") +
-  coord_trans(x= "identity", y= "identity", xlim= NULL,  ylim= c(0, 10e+6 )) +
-  ggtitle("Relationship between coach records (wins) and their salaries")
-
-```
+  coord_trans(x= "identity", y= "identity", xlim= NULL,  ylim= c(0, 10e+6 )) 
+``` 
