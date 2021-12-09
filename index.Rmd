@@ -544,7 +544,10 @@ df_20$player
 
 # Which position has more MVP's?
 df_20$position <- as.factor(df_20$position) # making position as factor
+```
+As mentioned in the previous graph, the position with more MVPs based on our dataset is the quarterback, followed by the defensive line, 4-3-outside linebacker, and finally wide-receiver. Since the quarterbacks are responsible for creating plays for all the team, it makes sense that they make more money.
 
+```{r echo=F}
 ggplot(df_20, aes(x= position, color= position, fill= position)) +
     geom_bar(stat = "count") +
     labs(x = "Position") +
@@ -573,7 +576,7 @@ ggplot(player_salary, aes(x= reorder(team, +fully_guaranteed), y=fully_guarantee
 
 # 7. What is the relationship between coach salaries and their records?
 
-Finally, the graph below shows some relationship between coach records wins and their salaries, where we were trying to find a trend on that. We hypothesize that the percentage of wins per number of games from these coaches is highly related to how much money they make. However, as we can see in the graph, we have no clear trend on this relationship. If we don't consider an outlier, the coach salaries ranged from 2.5 million to 10 million. Maybe after 60% of wins, some coaches are showing an annual salary above 7.5 million. Other than that, we would have to analyze more data to make some conclusions, maybe even looking at the number of losses, championships, etc.
+Finally, the graph below shows some relationship between coach records wins and their salaries, where we were trying to find a trend on that. We hypothesize that the percentage of wins per number of games from these coaches is highly related to how much money they make. However, as we can see in the graph, we have no clear trend on this relationship. If we don't consider an outlier, the coach salaries ranged from 2.5 million to 10 million. Maybe after 60% of wins, some coaches are showing an annual salary above 7.5 million. The coach that is making more money in the league is Andy Reid from KC Chiefs, which makes sense because he was in the last two Super Bowls and won one of them. Other than that, we would have to analyze more data to make some conclusions, maybe even looking at the number of losses, championships, etc.
 
 ```{r, include=FALSE}
 coach_record <- rename(coach_record, name = Name)
