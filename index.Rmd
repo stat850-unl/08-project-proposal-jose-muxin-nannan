@@ -576,7 +576,7 @@ ggplot(player_salary, aes(x= reorder(team, +fully_guaranteed), y=fully_guarantee
 
 # 7. What is the relationship between coach salaries and their records?
 
-Finally, the graph below shows some relationship between coach records wins and their salaries, where we were trying to find a trend on that. We hypothesize that the percentage of wins per number of games from these coaches is highly related to how much money they make. However, as we can see in the graph, we have no clear trend on this relationship. If we don't consider an outlier, the coach salaries ranged from 2.5 million to 10 million. Maybe after 60% of wins, some coaches are showing an annual salary above 7.5 million. The coach that is making more money in the league is Andy Reid from KC Chiefs, which makes sense because he was in the last two Super Bowls and won one of them. Other than that, we would have to analyze more data to make some conclusions, maybe even looking at the number of losses, championships, etc.
+Finally, the graph below shows some relationship between coach records wins in percentage and their salaries in US dollars, where we were trying to find a trend on that. We hypothesize that the percentage of wins per number of games from these coaches is highly related to how much money they make. However, as we can see in the graph, we have no clear trend on this relationship. If we don't consider an outlier, the coach salaries ranged from 2.5 million to 10 million. Maybe after 60% of wins, some coaches are showing an annual salary above 7.5 million. The coach that is making more money in the league is Andy Reid from KC Chiefs, which makes sense because he was in the last two Super Bowls and won one of them. Other than that, we would have to analyze more data to make some conclusions, maybe even looking at the number of losses, championships, etc.
 
 ```{r, include=FALSE}
 coach_record <- rename(coach_record, name = Name)
@@ -587,7 +587,6 @@ df_coach <- coach_record %>% merge(coach_salary, by = "name", all.x = TRUE)  %>%
 ```{r}
 ggplot(df_coach, aes(x= Pct*100, y=Annual_salary, color=name)) +
     geom_point(size=4, alpha=0.6) +
-    labs(x = "Wins (%)", y= "Salary ($)") + 
-  #theme(legend.position = "none") +
-  coord_trans(x= "identity", y= "identity", xlim= NULL,  ylim= c(0, 10e+6 )) 
+    labs(x = "Wins (%)", y= "Salary ($)")
+  #theme(legend.position = "none") 
 ``` 
