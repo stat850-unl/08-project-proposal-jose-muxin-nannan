@@ -280,40 +280,41 @@ head(coach_salary)
 
 ## Part B: Data analysis  
 
-## 1
+### 1 Analysis of Total value
+We want to know how the *total_value* varies by age, position, and team. We'll also do computations to showsome correlation.
+
+#### 1.1 average total value of each position
 
 ```{r echo=F}
-# average salary of each position
 posSa <- player_salary_ %>% group_by(player_salary_$position) %>%
   summarise(avg <- mean(total_value))
 posSa <- as.data.frame(posSa)
 posSa[order(posSa$`avg <- mean(total_value)`,decreasing=T),]
 ```
+This slide shows that quarterback position has the highest average salary. Positions like quarterback, edge-rusher, tackle, and 4-3-defensive-end positions make over 10 millions.
 
-quarterback is the position that makes the most money across all positions
+#### 1.2 number of players of each position
 ```{r echo=F}
-library(tidyverse)
-# number of players of each position
 frequency <- player_salary_ %>% group_by(player_salary_$position)%>%
   summarise(n = n())
 frequency <- as.data.frame(frequency)
 frequency[order(frequency$n,decreasing = T),]
 ```
 
-defensive-back is the position that has the most players across all positions; offensive-line is the position that has the second most players.
+There are 837 linebackers a part of defense which is responsible to stop both the run and pass. Their position is in the middle of the defense. From this slide, we can see that teams tend to have more players in defense. Wide-receiver is the position in the offense that has the largest number of players. 
 
+#### 1.3 average salary of each team
 ```{r echo=F}
-# average salary of each team
 teamSa <- player_salary_  %>% group_by(player_salary_ $team) %>%
   summarise(avg <- mean(total_value))
 teamSa <- as.data.frame(teamSa)
 teamSa[order(teamSa$`avg <- mean(total_value)`,decreasing=T),]
 ```
 
-players in Vikings make the most across all teams.
+This shows that the team Vikings earns the most in terms of the total value which is the amount of money on the contract.
 
+#### 1.4 average total value of each age group
 ```{r echo=F}
-# average salary of each age group
 unique(player_salary$age)
 ageSa <- player_salary_  %>% group_by(player_salary_ $age) %>%
   summarise(avg <- mean(total_value))
@@ -321,10 +322,10 @@ ageSa <- as.data.frame(ageSa)
 ageSa[order(ageSa$`avg <- mean(total_value)`,decreasing=T),]
 ```
 
-players older than 30 could make much more than those younger than 30
+From this plot, we can see that players around 40 years old earn the most compared to younger players. 
 
+#### 1.5 age and total value correlation
 ```{r echo=F}
-# age and total value correlation
 cor(player_salary_ $total_value,player_salary_ $age)
 corAge <- ggplot(data=player_salary_ ,aes(x=age,y=total_value))+xlim(0, 70)+geom_point(color ="darkgreen")
 corAge
@@ -333,8 +334,9 @@ corAge
 It shows that age is positively correlated with salary but it's not strong correlation;
 From the scatter plot, we could see that players with age around 30 make more money compared to other age groups, which is consistent with finding from previous part. 
 
+#### 1.6 is total value positively correlated with fully guaranteed?
+
 ```{r echo=F}
-# is total value positively correlated with fully guaranteed?
 cor(player_salary_ $total_value,player_salary_ $fully_guaranteed)
 corValue <- ggplot(data=player_salary_ ,aes(x=total_value,y=fully_guaranteed))+
   geom_point(color ="darkgreen")
@@ -344,7 +346,7 @@ corValue
 It shows that total_value and fully_guaranteed are highly correlated.
 
 ### 2 What are the variables related to high salary of players?
-As the dataset is related to the income or value of a player, so the first question we care about is what makes their income so different. Basing on the variables in the data, we propose following:
+We discuss the how **total_value** varies in the part 1, now we are interested in how the player are paid year by year, which is **avg_year** so they have such huge accumulative **tptal_value**. We propose the following: 
 
 #### 2.1 position
 
