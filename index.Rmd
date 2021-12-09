@@ -490,6 +490,8 @@ These three plots are different in their own way, but one noteworthy position is
 
 # 4. How many players will be free agency by 2022?
 
+The graph below shows the number of free agency players per year. As explained earlier, free agency means that these players will be free to negotiate with other teams by the year that their contract ends.  As we can see in the graph, there will be almost 5,000 free agency players by 2022, taking in count from 2017 to 2022. Also, the figure shows a trend of decreasing the number of free agency players from 2020 to 2025. This trend might be due to many players ending their contract to start a new one.
+
 ```{r echo=F}
 # Cheking how many player will be free agency by 2022
 df_free <- player_salary %>% dplyr::filter(agency_time >= 2022)
@@ -507,9 +509,9 @@ ggplot(df_agency, aes(x= agency_time, color="agency_time")) +
   ggtitle("Number of players by free agency years")
 ```
 
-There will be 2208 free agency players by 2022 
-
 # 5. What are the 20 MVP players based on their earns?
+
+The list below presents the 20 MVP, which stand for the 20 Most Valuable Players from the NFL league. For that calculation, we considered values from the dataset such as average per year (avg_year), total_guaranteed, and fully_guaranteed. As we can see, most of the player's positions on this list are a quarterback. The top three were Matt Ryan (Falcons), Russel Wilson (Seahawks), and Aaron Rodgers (Packers).
 
 ```{r echo=F}
 # Creating column with MVP value 
@@ -550,9 +552,9 @@ ggplot(df_20, aes(x= position, color= position, fill= position)) +
   ggtitle("MVP's per position")
 ```
 
-The position that shows more MVP's is the quarterback.
-
 # 6. What teams have the highest fully guaranteed expenses?
+
+The graph below shows the teams with higher fully guaranteed expenses, which is the money that the teams will spend with players regardless of what happens (injury, suspension, etc.).  The data was different from expected because neither of the teams that won the Super Bowl in the last three years (New England Patriots, KC Chiefs, and Tampa Bays) has more expenses due to higher investments. Therefore, more analysis is needed for different assumptions.In this case, the Bears team has the highest fully guaranteed expenses (~4,2 M dollars), followed by Red Skins (~4,1 M dollars) and Browns (~3,8 M dollars).
 
 ```{r echo=F}
 # Grouping by teams
@@ -567,9 +569,11 @@ ggplot(player_salary, aes(x= reorder(team, +fully_guaranteed), y=fully_guarantee
     coord_flip()
 ```
 
-The Bears team has the highest fully guaranteed expenses (~4,2 M dollars), followed by Red Skins (~4,1 M dollars) and Browns (~3,8 M dollars).
+
 
 # 7. What is the relationship between coach salaries and their records?
+
+Finally, the graph below shows some relationship between coach records wins and their salaries, where we were trying to find a trend on that. We hypothesize that the percentage of wins per number of games from these coaches is highly related to how much money they make. However, as we can see in the graph, we have no clear trend on this relationship. If we don't consider an outlier, the coach salaries ranged from 2.5 million to 10 million. Maybe after 60% of wins, some coaches are showing an annual salary above 7.5 million. Other than that, we would have to analyze more data to make some conclusions, maybe even looking at the number of losses, championships, etc.
 
 ```{r, include=FALSE}
 coach_record <- rename(coach_record, name = Name)
@@ -581,6 +585,6 @@ df_coach <- coach_record %>% merge(coach_salary, by = "name", all.x = TRUE)  %>%
 ggplot(df_coach, aes(x= Pct*100, y=Annual_salary, color=name)) +
     geom_point(size=4, alpha=0.6) +
     labs(x = "Wins (%)", y= "Salary ($)") + 
-  theme(legend.position = "none") +
+  #theme(legend.position = "none") +
   coord_trans(x= "identity", y= "identity", xlim= NULL,  ylim= c(0, 10e+6 )) 
 ``` 
