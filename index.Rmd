@@ -17,8 +17,10 @@ library(tidyr)
 ### 1, Read in data
 
 ```{r echo=F}
-# #install package 'xlsx' if not installed yet
+#install package 'xlsx' if not installed yet
+# 
 # if (!"xlsx" %in% installed.packages()) install.packages('xlsx')
+# 
 # library('xlsx')
 # 
 # #read in data sheets
@@ -47,6 +49,7 @@ coach_record <- read.csv('coach_record.csv',
 ```
 
 ### 2, Cleaning data
+The following part describes how we clean the data. We hide the code to avoid unreasonable length of this report.
 
 #### 2.1 General information of the datasets
 
@@ -60,7 +63,7 @@ summary(coach_record)
 
 Check if there are Na values.
 
-```{r echo=TRUE}
+```{r echo=F}
 # Check if there are NA values
 # for (i in sheet.index){
 #   print(data.list[[i]] %>% is.na() %>% sum())
@@ -103,36 +106,83 @@ colnames(coach_salary_) <- c(colnames(coach_salary_)[1:3], 'Annual_salary', 'Net
 
 2.1.3.1. **coach_salary**  
 * *Annual_salary*
+This is changed into numerical
 
 ```{r echo=F}
-# get the index of the cells with out 'million'
+# for (i in 1:nrow(coach_salary_)){
+#   coach_salary_[i, 'Annual_salary'] <- gsub('\\$', '', coach_salary_[i, 'Annual_salary'])
+#   coach_salary_[i, 'Annual_salary'] <- gsub(' ' , '', coach_salary_[i, 'Annual_salary'])
+# }
+```
+```{r echo=F}
 no_mill <- c(which(!agrepl('million', coach_salary_$Annual_salary, ignore.case = T)))
 
 # paste 'million' to uniform these cells
 for (i in no_mill)
   coach_salary_[i,'Annual_salary'] <- paste(coach_salary_[i,'Annual_salary'], 'million', collapse = ' ')
 
-# separate the numeric parts and drop million
+# coach_salary_
+```
+```{r echo=F}
 coach_salary_ <- separate(coach_salary_, Annual_salary, c('income', NA), ' ')
 
+# coach_salary_
+```
+```{r echo=F}
 # Keep numeric parts and change variable type to numeric
 for (i in 1:nrow(coach_salary_))
   coach_salary_[i,'income'] <-
 substr(coach_salary_[i, 'income'], 2, nchar(coach_salary_[i,'income']))
 
-# numerize the variable
-for (i in 1:nrow(coach_salary_)){
-  if (i %in% no_mill)
-    coach_salary_[i, 'income'] <- as.double(gsub(',', '', coach_salary_[i,'income']))
-  if (i==24)
-      coach_salary_[i, 'income'] <- as.double(substr(coach_salary_[i, 'income'], 1, (nchar(coach_salary_[i,'income'])-1)))
-  else
-    coach_salary_[i, 'income'] <- as.double(coach_salary_[i, 'income'])*1000000
-}
-coach_salary_ <- rename(coach_salary_, 'Annual_salary'='income')
+# coach_salary_
+```
+
+
+```{r echo=F}
+coach_salary_[23,'income'] <- '0.1'
+coach_salary_[24,'income'] <- '4'
+coach_salary_[26,'income'] <- '3.025'
+coach_salary_[30,'income'] <- '3.5'
+coach_salary_[31,'income'] <- '0.5'
+# coach_salary_
+```
+
+```{r echo=F}
+coach_salary_ <- mutate(coach_salary_, 'Annual_salary'=as.numeric(coach_salary_$income)*1000000)
+# coach_salary_
+```
+
+
+```{r echo=F}
+# # get the index of the cells with out 'million'
+# no_mill <- c(which(!agrepl('million', coach_salary_$Annual_salary, ignore.case = T)))
+# 
+# # paste 'million' to uniform these cells
+# for (i in no_mill)
+#   coach_salary_[i,'Annual_salary'] <- paste(coach_salary_[i,'Annual_salary'], 'million', collapse = ' ')
+# 
+# # separate the numeric parts and drop million
+# coach_salary_ <- separate(coach_salary_, Annual_salary, c('income', NA), ' ')
+# 
+# # Keep numeric parts and change variable type to numeric
+# for (i in 1:nrow(coach_salary_))
+#   coach_salary_[i,'income'] <-
+# substr(coach_salary_[i, 'income'], 2, nchar(coach_salary_[i,'income']))
+# 
+# # numerize the variable
+# for (i in 1:nrow(coach_salary_)){
+#   if (i %in% no_mill)
+#     coach_salary_[i, 'income'] <- as.double(gsub(',', '', coach_salary_[i,'income']))
+#   if (i==24)
+#       coach_salary_[i, 'income'] <- as.double(substr(coach_salary_[i, 'income'], 1, (nchar(coach_salary_[i,'income'])-1)))
+#   else
+#     coach_salary_[i, 'income'] <- as.double(coach_salary_[i, 'income'])*1000000
+# }
+# coach_salary_ <- rename(coach_salary_, 'Annual_salary'='income')
 ```
 
 * *Net_salary*
+This is also changed to numeric variable, there were missing piece warning, which is waht we want to get rid of in the str type, so just ignore it.
 
 ```{r echo=F}
 # Remove dollar sign and trim
@@ -149,6 +199,7 @@ coach_salary_ <- rename(coach_salary_, 'Net_worth'='net')
 ```
 
 2.1.3.2 **coach_record**
+Change this to double type
 
 ```{r echo=F}
 for (i in 4:ncol(coach_record_))
@@ -158,6 +209,7 @@ for (i in 4:ncol(coach_record_))
 ##### 2.1.4. Separate variables
 
 -   **player_salary**
+Seperate agency and end time. There is warning saying missing value which is taken care of in the next part.
 
 ```{r echo=F}
 
@@ -165,10 +217,10 @@ player_salary_ <- player_salary %>% separate(free_agency, c('agency_time', 'type
 # There's warning of NA's in the dataset
 
 # Extract rows with NA values
-player_salary_[c(which(is.na(player_salary_)==TRUE, arr.ind = TRUE)[,1]),]
+# player_salary_[c(which(is.na(player_salary_)==TRUE, arr.ind = TRUE)[,1]),]
 
 # These are not top players
-# the number of missing data is not very large, so we just drop  them
+# the number of missing data is not very large, so we just drop them
 player_salary_ <- player_salary_[-c(which(is.na(player_salary_)==TRUE, arr.ind = TRUE)[,1]) ,]
 rownames(player_salary_) <- c(1:nrow(player_salary_))
 
@@ -218,19 +270,17 @@ Here is the data we eventually have:
 player_salary <- player_salary_
 coach_record <- coach_record_
 coach_salary <- coach_salary_
-
-write.csv(coach_salary, file= "coach_salary_slide.csv")
-write.csv(coach_record, file= "coach_record_slide.csv")
-write.csv(player_salary, file= "player_salary_slide.csv")
-
+head(player_salary)
+head(coach_record)
+head(coach_salary)
 ```
 
 
 ## Topics and Analysis
 
-
 ## Part B: Data analysis  
-## NanNan 1(Please lable them in sections)
+
+## 1
 
 ```{r echo=F}
 # average salary of each position
@@ -293,7 +343,6 @@ corValue
 
 It shows that total_value and fully_guaranteed are highly correlated.
 
-## Muxin
 ### 2 What are the variables related to high salary of players?
 As the dataset is related to the income or value of a player, so the first question we care about is what makes their income so different. Basing on the variables in the data, we propose following:
 
@@ -485,8 +534,6 @@ ggplot(position_team, aes(x=position, y=avg_year))+
   facet_grid(Distr ~ .)
 ```
 These three plots are different in their own way, but one noteworthy position is *Safty*. Both *Dolphins* and *Ravens* are willing to pay a lot to this position. But if we look at the top most plot, that's not the case. It's probably that these two teams have good defense performance in the games.  
-
-#### Jose
 
 # 4. How many players will be free agency by 2022?
 
