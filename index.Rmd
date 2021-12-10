@@ -105,7 +105,7 @@ colnames(coach_salary_) <- c(colnames(coach_salary_)[1:3], 'Annual_salary', 'Net
 ##### 2.1.3 change the variable type
 
 2.1.3.1. **coach_salary**  
-* *Annual_salary*
+* *Annual_salary* *
 This is changed into numerical
 
 ```{r}
@@ -181,7 +181,7 @@ coach_salary_ <- mutate(coach_salary_, 'Annual_salary'=as.numeric(coach_salary_$
 # coach_salary_ <- rename(coach_salary_, 'Annual_salary'='income')
 ```
 
-* *Net_salary* *
+* *Net_salary* 
 This is also changed to numeric variable, there were missing piece warning, which is waht we want to get rid of in the str type, so just ignore it.
 
 ```{r, warning=FALSE}

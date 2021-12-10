@@ -297,7 +297,7 @@ colnames(coach_salary_) &lt;- c(colnames(coach_salary_)[1:3], &#39;Annual_salary
 <div id="change-the-variable-type" class="section level5">
 <h5>2.1.3 change the variable type</h5>
 <p>2.1.3.1. <strong>coach_salary</strong><br />
-* <em>Annual_salary</em> This is changed into numerical</p>
+* <em>Annual_salary</em> * This is changed into numerical</p>
 <pre class="r"><code># for (i in 1:nrow(coach_salary_)){
 #   coach_salary_[i, &#39;Annual_salary&#39;] &lt;- gsub(&#39;\\$&#39;, &#39;&#39;, coach_salary_[i, &#39;Annual_salary&#39;])
 #   coach_salary_[i, &#39;Annual_salary&#39;] &lt;- gsub(&#39; &#39; , &#39;&#39;, coach_salary_[i, &#39;Annual_salary&#39;])
@@ -327,7 +327,7 @@ coach_salary_[31,&#39;income&#39;] &lt;- &#39;0.5&#39;
 <pre class="r"><code>coach_salary_ &lt;- mutate(coach_salary_, &#39;Annual_salary&#39;=as.numeric(coach_salary_$income)*1000000)
 # coach_salary_</code></pre>
 <ul>
-<li><em>Net_salary</em> * This is also changed to numeric variable, there were missing piece warning, which is waht we want to get rid of in the str type, so just ignore it.</li>
+<li><em>Net_salary</em> This is also changed to numeric variable, there were missing piece warning, which is waht we want to get rid of in the str type, so just ignore it.</li>
 </ul>
 <pre class="r"><code># Remove dollar sign and trim
 for (i in 1:nrow(coach_salary_)){
