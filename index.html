@@ -335,9 +335,9 @@ for (i in 1:nrow(coach_salary_)){
   coach_salary_[i, &#39;Net_worth&#39;] &lt;- gsub(&#39; &#39; , &#39;&#39;, coach_salary_[i, &#39;Net_worth&#39;])
 }
 
-coach_salary_ &lt;- separate(coach_salary_, Net_worth, c(&#39;net&#39;, NA), &#39;million&#39;)</code></pre>
-<pre><code>## Warning: Expected 2 pieces. Missing pieces filled with `NA` in 1 rows [31].</code></pre>
-<pre class="r"><code>coach_salary_$net &lt;- as.double(coach_salary_$net)*1000000
+coach_salary_ &lt;- separate(coach_salary_, Net_worth, c(&#39;net&#39;, NA), &#39;million&#39;)
+
+coach_salary_$net &lt;- as.double(coach_salary_$net)*1000000
 
 coach_salary_ &lt;- rename(coach_salary_, &#39;Net_worth&#39;=&#39;net&#39;)</code></pre>
 <p>2.1.3.2 <strong>coach_record</strong> Change this to double type</p>
