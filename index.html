@@ -327,7 +327,7 @@ coach_salary_[31,&#39;income&#39;] &lt;- &#39;0.5&#39;
 <pre class="r"><code>coach_salary_ &lt;- mutate(coach_salary_, &#39;Annual_salary&#39;=as.numeric(coach_salary_$income)*1000000)
 # coach_salary_</code></pre>
 <ul>
-<li><em>Net_salary</em> This is also changed to numeric variable, there were missing piece warning, which is waht we want to get rid of in the str type, so just ignore it.</li>
+<li><em>Net_salary</em> * This is also changed to numeric variable, there were missing piece warning, which is waht we want to get rid of in the str type, so just ignore it.</li>
 </ul>
 <pre class="r"><code># Remove dollar sign and trim
 for (i in 1:nrow(coach_salary_)){
