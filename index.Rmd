@@ -1,11 +1,11 @@
 ---
-title: "Football analysis"
+title: "Football Analysis Report"
 output:
   html_document: default
   pdf_document: default
 ---
 
-```{r echo=F}
+```{r}
 # Libraries used
 library(dplyr)
 library(tidyverse)
@@ -36,7 +36,7 @@ library(tidyr)
 ```
 
 Read from different files
-```{r echo=F}
+```{r}
 player_salary <- read.csv('player_salary.csv',
                     header = TRUE,
                     sep = ',')
@@ -55,7 +55,7 @@ The following part describes how we clean the data. We hide the code to avoid un
 
 We first take a brief look at the datasets of their descriptive statistics.
 
-```{r echo=F}
+```{r}
 summary(player_salary)
 summary(coach_salary)
 summary(coach_record)
@@ -63,7 +63,7 @@ summary(coach_record)
 
 Check if there are Na values.
 
-```{r echo=F}
+```{r}
 # Check if there are NA values
 # for (i in sheet.index){
 #   print(data.list[[i]] %>% is.na() %>% sum())
@@ -81,7 +81,7 @@ We see there are some cleaning should be done before we can use these datasets:\
 
 ##### 2.1.1. missing values
 Delete some unreasonable and missing values.
-```{r echo=F}
+```{r}
 # replicate the original model for cleaning
 player_salary_ <- player_salary
 coach_salary_ <- coach_salary
@@ -94,7 +94,7 @@ coach_salary_[c(which(is.na(coach_salary)==TRUE, arr.ind = TRUE)[,1]),5] <- '2.5
 
 ##### 2.1.2 Fix column names
 change all the column names into underline format.
-```{r echo=F}
+```{r}
 colnames(coach_record_) <- c(coach_record_[1,])
 coach_record_ <- coach_record_[-1,]
 rownames(coach_record_) <- c(1:nrow(coach_record_))
@@ -108,13 +108,13 @@ colnames(coach_salary_) <- c(colnames(coach_salary_)[1:3], 'Annual_salary', 'Net
 * *Annual_salary*
 This is changed into numerical
 
-```{r echo=F}
+```{r}
 # for (i in 1:nrow(coach_salary_)){
 #   coach_salary_[i, 'Annual_salary'] <- gsub('\\$', '', coach_salary_[i, 'Annual_salary'])
 #   coach_salary_[i, 'Annual_salary'] <- gsub(' ' , '', coach_salary_[i, 'Annual_salary'])
 # }
 ```
-```{r echo=F}
+```{r}
 no_mill <- c(which(!agrepl('million', coach_salary_$Annual_salary, ignore.case = T)))
 
 # paste 'million' to uniform these cells
@@ -123,12 +123,12 @@ for (i in no_mill)
 
 # coach_salary_
 ```
-```{r echo=F}
+```{r}
 coach_salary_ <- separate(coach_salary_, Annual_salary, c('income', NA), ' ')
 
 # coach_salary_
 ```
-```{r echo=F}
+```{r}
 # Keep numeric parts and change variable type to numeric
 for (i in 1:nrow(coach_salary_))
   coach_salary_[i,'income'] <-
@@ -138,7 +138,7 @@ substr(coach_salary_[i, 'income'], 2, nchar(coach_salary_[i,'income']))
 ```
 
 
-```{r echo=F}
+```{r}
 coach_salary_[23,'income'] <- '0.1'
 coach_salary_[24,'income'] <- '4'
 coach_salary_[26,'income'] <- '3.025'
@@ -147,7 +147,7 @@ coach_salary_[31,'income'] <- '0.5'
 # coach_salary_
 ```
 
-```{r echo=F}
+```{r}
 coach_salary_ <- mutate(coach_salary_, 'Annual_salary'=as.numeric(coach_salary_$income)*1000000)
 # coach_salary_
 ```
@@ -184,7 +184,7 @@ coach_salary_ <- mutate(coach_salary_, 'Annual_salary'=as.numeric(coach_salary_$
 * *Net_salary*
 This is also changed to numeric variable, there were missing piece warning, which is waht we want to get rid of in the str type, so just ignore it.
 
-```{r echo=F}
+```{r}
 # Remove dollar sign and trim
 for (i in 1:nrow(coach_salary_)){
   coach_salary_[i, 'Net_worth'] <- gsub('\\$', '', coach_salary_[i, 'Net_worth'])
@@ -201,7 +201,7 @@ coach_salary_ <- rename(coach_salary_, 'Net_worth'='net')
 2.1.3.2 **coach_record**
 Change this to double type
 
-```{r echo=F}
+```{r}
 for (i in 4:ncol(coach_record_))
   coach_record_[,i] <- as.double(coach_record_[,i])
 ```
@@ -211,7 +211,7 @@ for (i in 4:ncol(coach_record_))
 -   **player_salary**
 Seperate agency and end time. There is warning saying missing value which is taken care of in the next part.
 
-```{r echo=F}
+```{r}
 
 player_salary_ <- player_salary %>% separate(free_agency, c('agency_time', 'type'),' ')
 # There's warning of NA's in the dataset
@@ -231,7 +231,7 @@ player_salary_$agency_time <- as.numeric(player_salary_$agency_time)
 
 Replace age larger than 50 or smaller than 15 with mean age of the rest age data.
 
-```{r echo=F}
+```{r}
 age_mean <- player_salary_ %>% filter(age>15) %>% filter(age<50) %>% select(age)%>% summarize_each(funs(mean))
 
 player_salary_[player_salary_$age < 15, 'age'] <- age_mean
@@ -240,7 +240,7 @@ player_salary_[player_salary_$age > 50, 'age'] <- age_mean
 
 There are three 0 values in *avg_year*, so we just delete them.
 
-```{r echo=F}
+```{r}
 player_salary_ <- player_salary_[player_salary_$avg_year != 0,]
 ```
 #### 2.1.6, Repeated variable
@@ -254,7 +254,7 @@ There are some positions belongs to the other, they are:
 **center** belong to **offensive-line**  
 **3-4-denfensive-tackle** and **4-3-defensive-tackle** (both belong to **defensive-line**)  
 
-```{r echo=F}
+```{r}
 player_salary_[player_salary_$position=='3-4-defensive-end','position'] <- '4-3-defensive-end'
 
 player_salary_[player_salary_$position=="3-4-defensive-tackle",'position'] <- "4-3-defensive-tackle"
@@ -266,7 +266,7 @@ player_salary_[player_salary_$position=='3-4-outside-linebacker','position'] <- 
 ```
 
 Here is the data we eventually have:
-```{r echo=F}
+```{r}
 player_salary <- player_salary_
 coach_record <- coach_record_
 coach_salary <- coach_salary_
@@ -285,7 +285,7 @@ We want to know how the *total_value* varies by age, position, and team. We'll a
 
 #### 1.1 average total value of each position
 
-```{r echo=F}
+```{r}
 posSa <- player_salary_ %>% group_by(player_salary_$position) %>%
   summarise(avg <- mean(total_value))
 posSa <- as.data.frame(posSa)
@@ -294,7 +294,7 @@ posSa[order(posSa$`avg <- mean(total_value)`,decreasing=T),]
 This slide shows that quarterback position has the highest average salary. Positions like quarterback, edge-rusher, tackle, and 4-3-defensive-end positions make over 10 millions.
 
 #### 1.2 number of players of each position
-```{r echo=F}
+```{r}
 frequency <- player_salary_ %>% group_by(player_salary_$position)%>%
   summarise(n = n())
 frequency <- as.data.frame(frequency)
@@ -304,7 +304,7 @@ frequency[order(frequency$n,decreasing = T),]
 There are 837 linebackers a part of defense which is responsible to stop both the run and pass. Their position is in the middle of the defense. From this slide, we can see that teams tend to have more players in defense. Wide-receiver is the position in the offense that has the largest number of players. 
 
 #### 1.3 average salary of each team
-```{r echo=F}
+```{r}
 teamSa <- player_salary_  %>% group_by(player_salary_ $team) %>%
   summarise(avg <- mean(total_value))
 teamSa <- as.data.frame(teamSa)
@@ -314,7 +314,7 @@ teamSa[order(teamSa$`avg <- mean(total_value)`,decreasing=T),]
 This shows that the team Vikings earns the most in terms of the total value which is the amount of money on the contract.
 
 #### 1.4 average total value of each age group
-```{r echo=F}
+```{r}
 unique(player_salary$age)
 ageSa <- player_salary_  %>% group_by(player_salary_ $age) %>%
   summarise(avg <- mean(total_value))
@@ -325,7 +325,7 @@ ageSa[order(ageSa$`avg <- mean(total_value)`,decreasing=T),]
 From this plot, we can see that players around 40 years old earn the most compared to younger players. 
 
 #### 1.5 age and total value correlation
-```{r echo=F}
+```{r}
 cor(player_salary_ $total_value,player_salary_ $age)
 corAge <- ggplot(data=player_salary_ ,aes(x=age,y=total_value))+xlim(0, 70)+geom_point(color ="darkgreen")
 corAge
@@ -336,7 +336,7 @@ From the scatter plot, we could see that players with age around 30 make more mo
 
 #### 1.6 is total value positively correlated with fully guaranteed?
 
-```{r echo=F}
+```{r}
 cor(player_salary_ $total_value,player_salary_ $fully_guaranteed)
 corValue <- ggplot(data=player_salary_ ,aes(x=total_value,y=fully_guaranteed))+
   geom_point(color ="darkgreen")
@@ -354,7 +354,7 @@ Position is the most intuitively reason we would associate with income -- there 
 
 ##### 2.1.1 Average highest
 I take the average over the annual salary after grouping them by position.
-```{r echo=F}
+```{r}
 # unique(player_salary$position)#24 positions in the data
 
 # Select columns of position, avg_year, player to find positions with the highest salary
@@ -377,7 +377,7 @@ p + stat_summary(fun=mean, color='darkred', geom='point') #red dot identifies th
 If we look at the number of positions by `unique()`, we see there are 24 positions, but we are concentrating on the highest ones, so I keep the top 10 average salary positions to display in the plot. Red dot in the plot identifies the average value.  
 Though the boxes are scaled by large value outliers, we cannot remove those outliers, because they represent the extraordinarily high paid players in each position, we'll take care of them later, Now I will zoom in to show the  tendency, of these average values.
 
-```{r echo=F}
+```{r}
 p + stat_summary(fun=mean, color='darkred', geom='point') +
     coord_trans(x = "identity", y = "identity", xlim = NULL, ylim = c(0,6e+6))
 
@@ -390,7 +390,7 @@ If we take a closer look at the boxplot, we find all the medians are close to th
 
 Here we extract top 10 highest paid players in top 10 high-paid positions, and plot the average annual salary versus position,
 
-```{r echo=F}
+```{r}
 top_10_each_position <- position_sub %>%
                           summarize_each(funs(mean)) %>%
                           arrange(desc(avg_year)) %>%
@@ -415,7 +415,7 @@ Another factor matters to salary could be age. It is conceivable that a player a
 ##### 2.2.1 Top player age distribution
 To look at if age affect salary, we will first look at the most paid players in each position to see their age distribution.
 
-```{r echo=F}
+```{r}
 player_salary %>% group_by(position) %>% slice_max(order_by = avg_year, n = 10) %>%
   ggplot(aes(x=age)) + 
   geom_histogram(binwidth = 2,
@@ -432,7 +432,7 @@ This plot has bin width of 2, and the red dashed line marks the mean of the dist
 
 ##### 2.2.1 All players age distribution
 We also interested in age distribution of all players, so we plot this:
-```{r echo=F}
+```{r}
 player_salary %>%
   ggplot(aes(x=age)) + 
   geom_histogram(binwidth = 2,
@@ -451,7 +451,7 @@ Just like some companies are willing to pay more to their employees, annual sala
 
 ##### 2.3.1 Average salary versus team
 We take average of each team and plot the following:
-```{r echo=F}
+```{r}
 # Average
 # head(player_salary)
 # player_salary %>% group_by(team) %>% select(c('team','avg_year')) %>% summarize_each(funs(mean)) %>%
@@ -471,14 +471,14 @@ p + stat_summary(fun=mean, color='darkred', geom='point') #red dot identifies th
 ```
 As what happened in position, there are outliers in each team. There seems a fluctuation, zoom in to identify the tendency.
 
-```{r echo=F}
+```{r}
 p + stat_summary(fun=mean, color='darkred', geom='point') +
     coord_trans(x = "identity", y = "identity", xlim = NULL, ylim = c(0,4e+6))
 ```
 
 Unlike the position, there is not an outstanding best-paid team, rather, there are few less-paid teams, so let's look at the bar plot.
 
-```{r echo=F}
+```{r}
 less_team <- player_salary[,c('team','avg_year')] %>% 
       group_by(team) %>%
       summarize_each(funs(mean)) %>%
@@ -512,7 +512,7 @@ In this bar plot, we can see the average annual of each team fluctuates between 
   
 Here we plot the average annual salary distributions by positions. To compare the how are the position investing strategy of *Dolphins* and *Ravens* are different from the overall trend, we put the plots together.
 
-```{r echo=F}
+```{r}
 all_team <- player_salary[,c('avg_year', 'position')]  %>% 
                 group_by(position) %>%
                 summarise_each(funs(mean))%>%
@@ -541,7 +541,7 @@ These three plots are different in their own way, but one noteworthy position is
 
 The graph below shows the number of free agency players per year. As explained earlier, free agency means that these players will be free to negotiate with other teams by the year that their contract ends.  As we can see in the graph, there will be almost 5,000 free agency players by 2022, taking in count from 2017 to 2022. Also, the figure shows a trend of decreasing the number of free agency players from 2020 to 2025. This trend might be due to many players ending their contract to start a new one.
 
-```{r echo=F}
+```{r}
 # Cheking how many player will be free agency by 2022
 df_free <- player_salary %>% dplyr::filter(agency_time >= 2022)
 nrow(df_free)
@@ -562,7 +562,7 @@ ggplot(df_agency, aes(x= agency_time, color="agency_time")) +
 
 The list below presents the 20 MVP, which stand for the 20 Most Valuable Players from the NFL league. For that calculation, we considered values from the dataset such as average per year (avg_year), total_guaranteed, and fully_guaranteed. As we can see, most of the player's positions on this list are a quarterback. The top three were Matt Ryan (Falcons), Russel Wilson (Seahawks), and Aaron Rodgers (Packers).
 
-```{r echo=F}
+```{r}
 # Creating column with MVP value 
 df_MVP <- player_salary %>% 
   rowwise() %>% 
@@ -596,7 +596,7 @@ df_20$position <- as.factor(df_20$position) # making position as factor
 ```
 As mentioned in the previous graph, the position with more MVPs based on our dataset is the quarterback, followed by the defensive line, 4-3-outside linebacker, and finally wide-receiver. Since the quarterbacks are responsible for creating plays for all the team, it makes sense that they make more money.
 
-```{r echo=F}
+```{r}
 ggplot(df_20, aes(x= position, color= position, fill= position)) +
     geom_bar(stat = "count") +
     labs(x = "Position") +
@@ -608,7 +608,7 @@ ggplot(df_20, aes(x= position, color= position, fill= position)) +
 
 The graph below shows the teams with higher fully guaranteed expenses, which is the money that the teams will spend with players regardless of what happens (injury, suspension, etc.).  The data was different from expected because neither of the teams that won the Super Bowl in the last three years (New England Patriots, KC Chiefs, and Tampa Bays) has more expenses due to higher investments. Therefore, more analysis is needed for different assumptions.In this case, the Bears team has the highest fully guaranteed expenses (~4,2 M dollars), followed by Red Skins (~4,1 M dollars) and Browns (~3,8 M dollars).
 
-```{r echo=F}
+```{r}
 # Grouping by teams
 library(dplyr)
 df_fully <- player_salary %>% group_by(team) %>% dplyr::summarize(fully_guaranteed_mean=(mean(fully_guaranteed)))
@@ -627,7 +627,7 @@ ggplot(player_salary, aes(x= reorder(team, +fully_guaranteed), y=fully_guarantee
 
 Finally, the graph below shows some relationship between coach records wins and their salaries, where we were trying to find a trend on that. We hypothesize that the percentage of wins per number of games from these coaches is highly related to how much money they make. However, as we can see in the graph, we have no clear trend on this relationship. If we don't consider an outlier, the coach salaries ranged from 2.5 million to 10 million. Maybe after 60% of wins, some coaches are showing an annual salary above 7.5 million. The coach that is making more money in the league is Andy Reid from KC Chiefs, which makes sense because he was in the last two Super Bowls and won one of them. Other than that, we would have to analyze more data to make some conclusions, maybe even looking at the number of losses, championships, etc.
 
-```{r, include=FALSE}
+```{r}
 coach_record <- rename(coach_record, name = Name)
 df_coach <- coach_record %>% merge(coach_salary, by = "name", all.x = TRUE)  %>% 
   na.omit()
