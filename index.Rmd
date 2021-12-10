@@ -181,7 +181,7 @@ coach_salary_ <- mutate(coach_salary_, 'Annual_salary'=as.numeric(coach_salary_$
 # coach_salary_ <- rename(coach_salary_, 'Annual_salary'='income')
 ```
 
-* *Net_salary*
+* *Net_salary* *
 This is also changed to numeric variable, there were missing piece warning, which is waht we want to get rid of in the str type, so just ignore it.
 
 ```{r}
@@ -231,7 +231,7 @@ player_salary_$agency_time <- as.numeric(player_salary_$agency_time)
 
 Replace age larger than 50 or smaller than 15 with mean age of the rest age data.
 
-```{r}
+```{r, include=FALSE}
 age_mean <- player_salary_ %>% filter(age>15) %>% filter(age<50) %>% select(age)%>% summarize_each(funs(mean))
 
 player_salary_[player_salary_$age < 15, 'age'] <- age_mean
